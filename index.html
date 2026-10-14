@@ -275,6 +275,8 @@ h2{font-size:16px;font-weight:700;color:var(--tx);margin:20px 0 8px}h2.od{color:
 .add select{height:36px;border:1px solid var(--bd);border-radius:18px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:0 10px;max-width:100%}
 option{background:var(--card);color:var(--tx)}
 #toast{position:fixed;left:50%;transform:translateX(-50%);top:84px;z-index:80;max-width:min(420px,92vw);background:var(--btn);color:#fff;padding:12px 18px;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.4);font-size:14px;font-weight:600;text-align:center}
+.ebx{max-height:90vh;overflow:auto}.ckh{margin-top:12px}.cli{display:flex;align-items:center;gap:8px;padding:4px 0}.cli .cb{width:22px;height:22px;border-radius:6px;font-size:13px}.cli .m{flex:1;overflow-wrap:anywhere;font-size:14px}.cli.done .m{color:var(--mu);text-decoration:line-through}.cli .x{width:30px;height:30px}
+@media(min-width:900px){[dir=rtl] body{padding-left:0;padding-right:200px}[dir=rtl] .nav{left:auto;right:0;border-right:0;border-left:1px solid var(--bd)}[dir=rtl] .hd{left:0;right:200px}}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -299,17 +301,27 @@ option{background:var(--card);color:var(--tx)}
 <div class="st" id="st"></div></div>
 <nav class="nav"><div class="logo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>Planner</div><button class="on" data-v="today"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span>Today</span></button><button data-v="boards"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>Boards</span></button><button data-v="ch"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.500 0 2 1 3 2 3 0-3-1-6 1-8.500z"/></svg><span>Challenges</span></button><button data-v="wk"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h3"/></svg><span>Week</span></button><button data-v="mo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg><span>Month</span></button><div class="sp"></div><div class="sy" id="sy"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A5.500 5.500 0 0 1 17 9a3.500 3.500 0 0 1 .5 9z"/><path d="M9.500 13.500l2 2 3.500-3.500"/></svg> Not saved</div><button class="me" data-v="pf"><span class="avs" id="av2">?</span><span id="mn">Profile</span></button></nav><button id="fab" aria-label="Add">+</button>
 <div id="dlg" hidden><div class="dbx" role="alertdialog" aria-modal="true"><b id="dt"></b><p id="dm"></p><div class="dr"><button id="dc">Cancel</button><button id="dk">Delete</button></div></div></div>
-<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
+<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div><div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter"><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
 <div id="rnd" hidden><div class="dbx ebx" role="dialog" aria-modal="true"><b id="rnt">Rename</b><input type="text" id="rni" maxlength="60"><div class="dr"><button id="rnc">Cancel</button><button id="rnk">Save</button></div></div></div>
 <div id="toast" hidden role="status"></div>
 <script>
 const $=s=>document.querySelector(s);
 const ymd=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
-const today=()=>ymd(new Date());
+var S={lang:'en',tf:'24',tz:'',ws:0,notif:true};
+const LC=()=>({en:undefined,fr:'fr',ar:'ar-u-nu-latn'}[S.lang]);
+const nowD=()=>{try{return S.tz?new Date(new Date().toLocaleString('en-US',{timeZone:S.tz})):new Date()}catch(e){return new Date()}};
+const today=()=>{try{return S.tz?new Date().toLocaleDateString('en-CA',{timeZone:S.tz}):ymd(new Date())}catch(e){return ymd(new Date())}};
+const fT=s=>{if(!s||S.tf!=='12')return s;const q=s.split(':').map(Number),h=q[0];return ((h%12)||12)+':'+String(q[1]).padStart(2,'0')+' '+(h<12?'AM':'PM')};
+const wOff=d=>(d.getDay()-(+S.ws||0)+7)%7;
+const ORD=()=>[0,1,2,3,4,5,6].map(i=>(i+(+S.ws||0))%7);
+let DN=[];const setDN=()=>{DN=[0,1,2,3,4,5,6].map(i=>new Date(2023,0,1+i).toLocaleDateString(LC(),{weekday:'short'}))};setDN();
+const dueSt=t=>{if(!t.due)return 'none';if(t.done)return 'done';const td=today(),tm=ymd(new Date(new Date(td+'T12:00').getTime()+864e5));return t.due<td?'over':t.due===td?'today':t.due===tm?'tmr':'later'};
+const dueTag=t=>{const k=dueSt(t);if(k==='none'||k==='done')return '';return '<span class="tg '+(k==='over'?'d':k==='today'?'u':'')+'">'+(k==='over'?'Overdue':k==='today'?'Due today':k==='tmr'?'Due tomorrow':'Due '+fmt(t.due,{day:'numeric',month:'short'}))+'</span>'};
+const clTag=t=>t.cl&&t.cl.length?'<span class="tg n">☑ '+t.cl.filter(x=>x.done).length+'/'+t.cl.length+'</span>':'';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const IC=p=>'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
 const TRASH=IC('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>'),PENCIL=IC('<path d="M4 20h4L19 9a2.800 2.800 0 0 0-4-4L4 16z"/><path d="M13.500 6.500l4 4"/>');
-const fmt=(s,o)=>new Date(s+'T12:00').toLocaleDateString(undefined,o);
+const fmt=(s,o)=>new Date(s+'T12:00').toLocaleDateString(LC(),o);
 let sel=today(),tasks=[],col=null,imp=false,urg=false;
 const MSG={local:'Not signed in.',ok:'Saved. Your tasks sync to your other devices.',saving:'Saving…',err:'Offline. Your changes are kept on this device and sync automatically.'};
 const SY={local:'Not saved',ok:'Synced',saving:'Saving…',err:'Error'};const setSt=k=>{$('#st').textContent=MSG[k];const y=$('#sy');if(y)y.lastChild.textContent=' '+SY[k]};
@@ -321,8 +333,8 @@ function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
   if(col){setSt('saving');col.doc(id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function row(t,od){const tg=[];
   if(od)tg.push('<span class="tg d">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');
-  if(t.time)tg.push('<span class="tg n">'+esc(t.time)+'</span>');
-  if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
+  if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+'</span>');
+  {const a=dueTag(t),c=clTag(t);if(a)tg.push(a);if(c)tg.push(c)}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
   return '<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="tg" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(tg.length?'<div class="tags">'+tg.join('')+'</div>':'')+'</div><button class="x" data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button class="x" data-a="rm" aria-label="Delete task">'+TRASH+'</button></div>'}
 function render(){
   const td=today(),isT=sel===td;
@@ -421,7 +433,7 @@ $('#fg').onclick=async()=>{const email=$('#ae').value.trim();if(!email){amsg('Ty
 
 let boards=[],chs=[],selB=null,addingB=false,fc=null,armed=null;
 const gid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const _r=render;render=function(){_r();renderBoards();renderCh();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
+const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
 function save(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o;render();
   if(col){setSt('saving');col.doc(o.id).set(o).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function drop(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);if(i>=0)a.splice(i,1);
@@ -432,7 +444,7 @@ function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle
 document.querySelector('.nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
 
 /* ---------- Boards: board > cards > tasks ---------- */
-const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(t.date?'<div class="tags"><span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span></div>':'')+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
+const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(()=>{const x=[];if(t.date)x.push('<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');[dueTag(t),clTag(t)].forEach(v=>{if(v)x.push(v)});return x.length?'<div class="tags">'+x.join('')+'</div>':''})()+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
 function renderBoards(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#bv input')&&a.value)return;
   const bd=boards.slice().sort((x,y)=>x.created-y.created);
@@ -442,7 +454,7 @@ function renderBoards(){
   if(!B)h+='<div class="empty">Create your first board, for example Studies, Work or Health.</div>';
   else{const ts=tasks.filter(t=>t.boardId===B.id),n=B.stages.length;
     h+='<div class="cols">'+B.stages.map(s=>{const cs=ts.filter(t=>t.stageId===s.id).sort((x,y)=>x.updatedAt-y.updatedAt);
-      return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+' <span>'+cs.length+'</span></h3><button class="d3" data-a="lm" aria-label="Card options">'+DOTS+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')}
+      return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+'</h3><button class="d3" data-a="lm" aria-label="Card options">'+DOTS+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')}
   $('#bv').innerHTML=h;
   if(fc){const el=$('#bv '+fc);fc=null;if(el)el.focus()}
 }
@@ -509,27 +521,27 @@ $('#cf').onclick=e=>{const id=e.target.id;if(id==='cnew')cform(true);else if(id=
 /* ---------- Week: timetable, routines, goals ---------- */
 let rts=[],gls=[],evs=[],prs=[],wform='',mY=new Date().getFullYear(),mM=new Date().getMonth(),mSel=today();
 const arr=t=>({board:boards,challenge:chs,routine:rts,goal:gls,event:evs,pref:prs}[t]);
-const DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
 const hs=x=>[...x].reduce((a,c)=>(a*31+c.charCodeAt(0))%5,0);
 const dayR=wd=>rts.filter(r=>r.days.includes(wd)).sort((a,b)=>a.start.localeCompare(b.start));
-const sess=(r,del)=>'<div class="se '+(r.kind==='personal'?'kg':'kb')+'"><b>'+esc(r.subject)+'</b><div>'+r.start+'–'+r.end+'</div><div>'+esc([r.room,r.teacher].filter(Boolean).join(' · '))+'</div>'+(del?'<button class="x" data-a="dr" data-id="'+r.id+'" aria-label="Delete routine">'+TRASH+'</button>':'')+'</div>';
+const sess=(r,del)=>'<div class="se '+(r.kind==='personal'?'kg':'kb')+'"><b>'+esc(r.subject)+'</b><div>'+fT(r.start)+'–'+fT(r.end)+'</div><div>'+esc([r.room,r.teacher].filter(Boolean).join(' · '))+'</div>'+(del?'<button class="x" data-a="dr" data-id="'+r.id+'" aria-label="Delete routine">'+TRASH+'</button>':'')+'</div>';
 function renderSch(){const r=dayR(new Date(sel+'T12:00').getDay());$('#sch').innerHTML=r.length?'<h2>Schedule</h2>'+r.map(x=>sess(x,0)).join(''):''}
 const left=g=>Math.round((new Date(g.end+'T12:00')-new Date(today()+'T12:00'))/864e5);
-const hm=x=>{const q=x.split(':');return +q[0]+(q[1]==='00'?'':':'+q[1])};
+const hm=x=>{if(S.tf==='12')return fT(x);const q=x.split(':');return +q[0]+(q[1]==='00'?'':':'+q[1])};
 let wopen=null;
-function renderWk(){const t0=new Date(),a=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()-t0.getDay()),b=new Date(a.getFullYear(),a.getMonth(),a.getDate()+6),td=today();
-  const mo=(d,o)=>d.toLocaleDateString(undefined,{month:o});
+function renderWk(){const t0=nowD(),a=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()-wOff(t0)),b=new Date(a.getFullYear(),a.getMonth(),a.getDate()+6),td=today();
+  const mo=(d,o)=>d.toLocaleDateString(LC(),{month:o});
   const rng=a.getMonth()===b.getMonth()?a.getDate()+' to '+b.getDate()+' '+mo(b,'long'):a.getDate()+' '+mo(a,'short')+' to '+b.getDate()+' '+mo(b,'short');
   const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5);
   const goals=gls.slice().sort((x,y)=>x.end.localeCompare(y.end)).map(x=>{const n=D(x.start,x.end)+1,pc=x.done?100:Math.max(0,Math.min(100,Math.round((D(x.start,td)+1)/n*100))),l=left(x);
     return '<div class="chc" data-gid="'+x.id+'"><div class="r2"><b class="m'+(x.done?' dn':'')+'">'+esc(x.title)+'</b><span class="tg">'+n+(n===1?' day':' days')+'</span></div><div class="bar"><i style="width:'+pc+'%"></i></div><div class="cnt" style="margin:0">'+(x.done?'Done':l<0?'Ended '+(-l)+(l===-1?' day':' days')+' ago':l+(l===1?' day':' days')+' left')+' · <button class="lk2" data-a="gd">'+(x.done?'Undo':'Mark done')+'</button> · <button class="lk2" data-a="dg">'+'Delete'+'</button></div></div>'}).join('');
-  const rows=[0,1,2,3,4,5,6].map(d=>{const r=dayR(d);if(!r.length)return '';const op=r.find(x=>x.id===wopen);
+  const rows=ORD().map(d=>{const r=dayR(d);if(!r.length)return '';const op=r.find(x=>x.id===wopen);
     return '<div class="wr"><div class="wrl"><b'+(d===t0.getDay()?' class="tdyl"':'')+'>'+DN[d]+'</b><div class="chs">'+r.map(x=>'<button class="rc '+(x.kind==='personal'?'kg':'kb')+'" data-a="ro" data-id="'+x.id+'">'+esc(x.subject)+' '+hm(x.start)+'-'+hm(x.end)+'</button>').join('')+'</div></div>'+
-    (op?'<div class="rd">'+esc([op.subject,op.start+'–'+op.end,op.room,op.teacher].filter(Boolean).join(' · '))+' · <button class="lk2" data-a="dr" data-id="'+op.id+'">'+'Delete'+'</button></div>':'')+'</div>'}).join('');
+    (op?'<div class="rd">'+esc([op.subject,fT(op.start)+'–'+fT(op.end),op.room,op.teacher].filter(Boolean).join(' · '))+' · <button class="lk2" data-a="dr" data-id="'+op.id+'">'+'Delete'+'</button></div>':'')+'</div>'}).join('');
   window.wkR=rng;$('#wl').innerHTML=
   
   '<div class="wc2"><div><h2>Goals</h2>'+(goals||'<div class="cnt">No goals yet.</div>')+'</div><div><h2>Weekly routine</h2>'+(rows||'<div class="cnt">No routines yet. Add classes, work hours or the gym.</div>')+'</div></div>'}
-function wformR(){const D7=DN.map((n,i)=>'<button class="chip dy" data-d="'+i+'">'+n+'</button>').join('');
+function wformR(){const D7=ORD().map(i=>'<button class="chip dy" data-d="'+i+'">'+DN[i]+'</button>').join('');
   const seg=m=>'<div class="row"><button class="chip'+(m==='s'?' on':'')+'" data-a="ns">Routine</button><button class="chip'+(m==='g'?' on':'')+'" data-a="ng">Goal</button></div>';
   $('#wf').innerHTML=wform==='s'?'<div class="add">'+seg('s')+'<input type="text" id="ws" placeholder="Subject, e.g. ML2 or Gym" maxlength="60"><div class="row"><button class="chip kd on" data-k="study">School or work</button><button class="chip kd" data-k="personal">Personal</button></div><div class="row">'+D7+'</div><div class="row"><label>From <input type="time" id="wst" value="'+nowHM()+'"></label><label>To <input type="time" id="wen" value="'+nowHM(1)+'"></label></div><div class="row"><input class="sm" type="text" id="wr" placeholder="Room" maxlength="20"><input class="sm" type="text" id="wtc" placeholder="Teacher" maxlength="40"></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="sc">Save routine</button></div></div>':
   wform==='g'?'<div class="add">'+seg('g')+'<input type="text" id="gt" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>From <input type="date" id="gs" value="'+today()+'"></label><label>To <input type="date" id="ge"></label></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="gc">Save goal</button></div></div>':
@@ -559,14 +571,14 @@ $('#wl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.d
 const evOn=d=>evs.filter(e=>e.date===d).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
 function renderMo(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#mv2 input')&&a.value)return;
-  const dim=new Date(mY,mM+1,0).getDate(),off=new Date(mY,mM,1).getDay(),td=today();
-  let c=DN.map(n=>'<b>'+n+'</b>').join('');for(let i=0;i<off;i++)c+='<div class="mc o"></div>';
+  const dim=new Date(mY,mM+1,0).getDate(),off=wOff(new Date(mY,mM,1)),td=today();
+  let c=ORD().map(i=>'<b>'+DN[i]+'</b>').join('');for(let i=0;i<off;i++)c+='<div class="mc o"></div>';
   for(let d=1;d<=dim;d++){const ds=mY+'-'+String(mM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),ev=evOn(ds),nt=tasks.filter(t=>t.date===ds&&!t.done).length,ng=gls.filter(g=>g.end===ds&&!g.done).length;
     c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+ev.slice(0,2).map(e=>'<i class="ev">'+esc(e.title)+'</i>').join('')+(ev.length>2?'<i class="ev">+'+(ev.length-2)+'</i>':'')+(nt||ng?'<em>'+(nt?nt+(nt>1?' tasks':' task'):'')+(ng?' ⚑':'')+'</em>':'')+'</button>'}
   const pre=mY+'-'+String(mM+1).padStart(2,'0')+'-',mlist=evs.filter(e=>e.date.startsWith(pre)).sort((a,b)=>a.date.localeCompare(b.date)).map(e=>'<div class="t"><div class="m"><b>'+fmt(e.date,{day:'numeric',month:'short'})+'</b> · '+esc(e.title)+'</div></div>').join('')||'<div class="cnt" style="margin:0">No events this month.</div>';
   const ev=evOn(mSel),ts=tasks.filter(t=>t.date===mSel),gs=gls.filter(g=>g.end===mSel);
-  $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(undefined,{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
-  ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+e.time+'</span>':'')+(e.remind!=null?' <span class="tg">Reminder · '+remLbl(e.remind)+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
+  $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
+  ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+fT(e.time)+'</span>':'')+(e.remind!=null?' <span class="tg">Reminder · '+remLbl(e.remind)+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
   ts.map(t=>'<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="m">'+esc(t.title)+'</div></div>').join('')+gs.map(g=>'<div class="t"><div class="m">Goal ends: '+esc(g.title)+'</div></div>').join('')+
   '<div class="add"><input type="text" id="me" placeholder="Add an event for this day" maxlength="100"><div class="row"><input type="time" id="mt" value="'+(mtV||nowHM())+'" aria-label="Time"><select id="mr" aria-label="Reminder">'+REM.map(r=>'<option value="'+r[0]+'"'+(String(mrV)===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="go" data-a="ae">Add</button></div></div><button class="chip" data-a="od">Open this day</button></div></div>'}
 function addEv(){const v=$('#me').value.trim();if(!v)return;const t=$('#mt').value,r=$('#mr').value;$('#me').value='';mtV=null;mrV='';save({type:'event',id:gid('e'),title:v,date:mSel,time:t||'',remind:r===''?null:+r,created:Date.now()})}
@@ -590,10 +602,10 @@ function applyTheme(t){theme=t;const r=document.documentElement;
   try{localStorage.setItem('dpTheme',t)}catch(e){}
   $('#thb').innerHTML=isDark()?SUN:MOON}
 $('#thb').onclick=()=>{const t=isDark()?'light':'dark';applyTheme(t);savePref({theme:t})};
-function renderStrip(){const d=new Date(sel+'T12:00'),st=new Date(d.getFullYear(),d.getMonth(),d.getDate()-d.getDay(),12),td=today();
-  let h='<div class="sh"><button data-a="pw" aria-label="Previous week">‹</button><button class="mb" data-a="tt">'+d.toLocaleDateString(undefined,{month:'long',year:'numeric'})+'</button><button data-a="nw" aria-label="Next week">›</button></div><div class="sd">';
+function renderStrip(){const d=new Date(sel+'T12:00'),st=new Date(d.getFullYear(),d.getMonth(),d.getDate()-wOff(d),12),td=today();
+  let h='<div class="sh"><button data-a="pw" aria-label="Previous week">‹</button><button class="mb" data-a="tt">'+d.toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</button><button data-a="nw" aria-label="Next week">›</button></div><div class="sd">';
   for(let i=0;i<7;i++){const x=new Date(st.getFullYear(),st.getMonth(),st.getDate()+i,12),ds=ymd(x);
-    h+='<button data-d="'+ds+'" class="'+(ds===sel?'on':'')+(ds===td?' tdy':'')+'"><small>'+x.toLocaleDateString(undefined,{weekday:'short'})+'</small><span>'+x.getDate()+'</span></button>'}
+    h+='<button data-d="'+ds+'" class="'+(ds===sel?'on':'')+(ds===td?' tdy':'')+'"><small>'+x.toLocaleDateString(LC(),{weekday:'short'})+'</small><span>'+x.getDate()+'</span></button>'}
   $('#strip').innerHTML=h+'</div>'}
 $('#strip').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.d)sel=b.dataset.d;
@@ -604,19 +616,25 @@ function renderSeg(){$('#seg').innerHTML=['All','High','Medium','Low'].map((x,i)
 $('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;PF=+b.dataset.p;render()};
 $('#fab').onclick=()=>$('#qa').click();
 /* ---------- Confirm and edit dialogs ---------- */
-let dfn=null,etask=null;
+let dfn=null,etask=null,ecl=[];
+function renderEcl(){$('#eck').innerHTML=ecl.map((x,i)=>'<div class="cli'+(x.done?' done':'')+'" data-i="'+i+'"><button class="cb" data-a="cc" aria-label="Toggle">'+(x.done?'✓':'')+'</button><span class="m">'+esc(x.text)+'</span><button class="x" data-a="cx" aria-label="Delete">×</button></div>').join('')}
+function addCk(){const v=$('#eci').value.trim();if(v){ecl.push({id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,4),text:v,done:false});$('#eci').value=''}return ecl}
+function updEds(){const v=$('#edd').value,k=dueSt({due:v,done:etask&&etask.done});$('#eds').textContent=({none:'No deadline',done:'Done',over:'Overdue',today:'Due today',tmr:'Due tomorrow',later:'Due '+(v?fmt(v,{day:'numeric',month:'short'}):'')})[k]}
+$('#edd').oninput=updEds;$('#edx').onclick=()=>{$('#edd').value='';updEds()};
+$('#eck').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.closest('.cli').dataset.i;if(b.dataset.a==='cx')ecl.splice(i,1);else ecl[i].done=!ecl[i].done;renderEcl()};
+$('#eci').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addCk();renderEcl()}};
 function ask(title,msg,fn){dfn=fn;$('#dt').textContent=title;$('#dm').textContent=msg;$('#dlg').hidden=false;$('#dc').focus()}
 function dclose(){$('#dlg').hidden=true;dfn=null}
 $('#dc').onclick=dclose;$('#dlg').onclick=e=>{if(e.target.id==='dlg')dclose()};
 $('#dk').onclick=()=>{const f=dfn;dclose();if(f)f()};
 function openEdit(id){const t=tasks.find(x=>x.id===id);if(!t)return;etask=t;
-  $('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
+  ecl=(t.cl||[]).map(x=>({...x}));$('#edd').value=t.due||'';renderEcl();updEds();$('#eci').value='';$('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
   $('#ei').classList.toggle('on',!!t.important);$('#eu').classList.toggle('on',!!t.urgent);$('#edl').hidden=false;$('#et').focus()}
 function closeEdit(){$('#edl').hidden=true;etask=null}
 $('#ei').onclick=e=>e.currentTarget.classList.toggle('on');$('#eu').onclick=e=>e.currentTarget.classList.toggle('on');
 $('#ec').onclick=closeEdit;$('#edl').onclick=e=>{if(e.target.id==='edl')closeEdit()};
 function saveEdit(){const v=$('#et').value.trim();if(!v||!etask){$('#et').focus();return}
-  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),updatedAt:Date.now()});closeEdit()}
+  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),due:$('#edd').value||'',cl:addCk(),updatedAt:Date.now()});closeEdit()}
 $('#es').onclick=saveEdit;
 $('#edl').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='et')saveEdit()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#dlg').hidden)dclose();if(!$('#edl').hidden)closeEdit()}});
@@ -630,7 +648,7 @@ let curV='today';
 const QA={today:'+ New task',boards:'+ New card',ch:'+ New challenge',wk:'+ Add routine',mo:'+ New event',pf:''};
 function setHd(){
   const ti={today:sel===today()?'Today':fmt(sel,{weekday:'long'}),boards:'Boards',ch:'Challenges',wk:'Week',mo:'Month',pf:'Profile'}[curV];
-  const c=$('#cnt').textContent,sub={today:fmt(sel,{weekday:'long',day:'numeric',month:'long'})+(c?' · '+c:''),boards:'',ch:'',wk:window.wkR||'',mo:new Date(mY,mM,1).toLocaleDateString(undefined,{month:'long',year:'numeric'}),pf:''}[curV];
+  const c=$('#cnt').textContent,sub={today:fmt(sel,{weekday:'long',day:'numeric',month:'long'})+(c?' · '+c:''),boards:'',ch:'',wk:window.wkR||'',mo:new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'}),pf:''}[curV];
   $('#ht').firstChild.textContent=ti;$('#hs').textContent=sub;$('#qa').textContent=QA[curV];$('#qa').hidden=!QA[curV]}
 $('#qa').onclick=()=>{const k=curV;
   if(k==='today')$('#in').focus();
@@ -657,25 +675,28 @@ $('#wel').onclick=e=>{const b=e.target.closest('button');if(!b)return;
 $('#wel').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='wn'){const b=document.querySelector('[data-a=wsave]');if(b)b.click()}};
 function renderPf(){if(prs[0]&&prs[0].theme&&prs[0].theme!==theme)applyTheme(prs[0].theme);$('#av').textContent=ini(pn());$('#av2').textContent=ini(pn());$('#mn').textContent=pn()||'Profile';
   const a=document.activeElement;if(a&&a.id==='pn')return;
-  $('#pv').innerHTML='<button class="chip" data-a="pb">‹ Back</button><div class="pfh"><div class="bigav">'+esc(ini(pn()))+'</div><div class="m"><input type="text" id="pn" value="'+esc(pn())+'" placeholder="Your name" maxlength="40"><div class="cnt" style="margin:4px 0 0">'+(window.EMAIL?'Signed in as '+esc(window.EMAIL):'Not signed in')+'</div></div></div><h2>Appearance</h2><div class="row">'+['auto','light','dark'].map(x=>'<button class="chip'+(theme===x?' on':'')+'" data-th="'+x+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join('')+'</div><h2>Your data</h2><div class="cnt" style="margin:0">'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+rts.length+' routines · '+gls.length+' goals · '+evs.length+' events</div><h2>Account</h2><div class="cnt" style="margin:0">'+esc($('#st').textContent)+'</div><button class="chip" data-a="lo" style="margin-top:14px">Log out</button>'}
+  $('#pv').innerHTML='<button class="chip" data-a="pb">‹ Back</button><div class="pfh"><div class="bigav">'+esc(ini(pn()))+'</div><div class="m"><input type="text" id="pn" value="'+esc(pn())+'" placeholder="Your name" maxlength="40"><div class="cnt" style="margin:4px 0 0">'+(window.EMAIL?'Signed in as '+esc(window.EMAIL):'Not signed in')+'</div></div></div><h2>Appearance</h2><div class="row">'+['auto','light','dark'].map(x=>'<button class="chip'+(theme===x?' on':'')+'" data-th="'+x+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join('')+'</div>'+settingsHtml()+'<h2>Your data</h2><div class="cnt" style="margin:0">'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+rts.length+' routines · '+gls.length+' goals · '+evs.length+' events</div><h2>Account</h2><div class="cnt" style="margin:0">'+esc($('#st').textContent)+'</div><button class="chip" data-a="lo" style="margin-top:14px">Log out</button>'}
 $('#pv').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.a==='pb'){show(lastV);return}
   if(b.dataset.a==='lo'){if(sb)sb.auth.signOut().then(()=>location.reload());return}
+  if(b.dataset.tf){savePref({tf:b.dataset.tf});return}
+  if(b.dataset.ws){savePref({ws:+b.dataset.ws});return}
+  if(b.dataset.nt){const on=b.dataset.nt==='on';savePref({notif:on});if(on){askNotif();if(window.Notification&&Notification.permission==='denied')toast('Notifications are blocked in your browser settings.')}return}
   if(b.dataset.th){applyTheme(b.dataset.th);savePref({theme:b.dataset.th});return}};
-$('#pv').onchange=e=>{if(e.target.id==='pn')savePref({name:e.target.value.trim()})};
+$('#pv').onchange=e=>{if(e.target.id==='sl')savePref({lang:e.target.value});if(e.target.id==='stz')savePref({tz:e.target.value});if(e.target.id==='pn')savePref({name:e.target.value.trim()})};
 $('#pv').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='pn')e.target.blur()};
 $('#av').onclick=()=>show('pf');
 function renderSide(){
   const td=today(),isT=sel===td;
   const open=tasks.filter(t=>!t.done&&(t.date===sel||(isT&&t.date&&t.date<td)));
   const q=(i,u)=>open.filter(t=>!!t.important===i&&!!t.urgent===u).map(t=>'<div class="mq">'+esc(t.title)+'</div>').join('')||'<div class="mq mu">None</div>';
-  const n=new Date(),h2=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2),nx=isT?dayR(n.getDay()).find(r=>r.end>h2):null;
-  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Next class</h2>'+(nx?'<div class="se '+(nx.kind==='personal'?'kg':'kb')+'"><b>'+esc(nx.subject)+'</b><div>'+nx.start+'–'+nx.end+'</div><div>'+esc([nx.room].filter(Boolean).join(' · '))+'</div></div>':'<div class="cnt" style="margin:0">Nothing else scheduled today.</div>')+
+  const n=nowD(),h2=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2),nx=isT?dayR(n.getDay()).find(r=>r.end>h2):null;
+  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Next class</h2>'+(nx?'<div class="se '+(nx.kind==='personal'?'kg':'kb')+'"><b>'+esc(nx.subject)+'</b><div>'+fT(nx.start)+'–'+fT(nx.end)+'</div><div>'+esc([nx.room].filter(Boolean).join(' · '))+'</div></div>':'<div class="cnt" style="margin:0">Nothing else scheduled today.</div>')+
   '<h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'}
 /* ---------- 3-dot menus, rename dialog, reminders, current-time defaults ---------- */
 const DOTS='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
 const pad2=n=>String(n).padStart(2,'0');
-const nowHM=p=>{const d=new Date();let h=d.getHours(),m=d.getMinutes();if(p){h+=p;if(h>23){h=23;m=59}}return pad2(h)+':'+pad2(m)};
+const nowHM=p=>{const d=nowD();let h=d.getHours(),m=d.getMinutes();if(p){h+=p;if(h>23){h=23;m=59}}return pad2(h)+':'+pad2(m)};
 let mnuEl=null,rnfn=null,tmTouched=false,mtV=null,mrV='';
 const REM=[['','No reminder'],['0','At time of event'],['5','5 min before'],['10','10 min before'],['30','30 min before'],['60','1 hour before'],['1440','1 day before']];
 const remLbl=m=>(REM.find(r=>r[0]===String(m))||['',m+' min before'])[1];
@@ -723,17 +744,119 @@ function askNotif(){try{if('Notification' in window&&Notification.permission==='
 function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>{t.hidden=true},9000)}
 function firedMap(){try{return JSON.parse(localStorage.getItem('dpFired')||'{}')}catch(e){return{}}}
 const remShort=m=>m>=1440?'1 day':m>=60?(m/60)+(m===60?' hour':' hours'):m+' min';
-function notify(title,body,tag){try{if(!('Notification' in window)||Notification.permission!=='granted')return;
+function notify(title,body,tag){try{if(S.notif===false)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
   const plain=()=>new Notification(title,{body,tag,icon:'icon-192.png'});
   if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(r=>r?r.showNotification(title,{body,tag,icon:'icon-192.png'}):plain()).catch(()=>{try{plain()}catch(e){}});else plain()}catch(e){}}
-function checkRem(){const now=Date.now(),f=firedMap();let ch=false;
+function checkRem(){if(S.notif===false)return;const now=nowD().getTime(),f=firedMap();let ch=false;
   evs.forEach(e=>{if(e.remind==null||!e.date)return;
     const p=e.date.split('-').map(Number),q=(e.time||'09:00').split(':').map(Number),at=new Date(p[0],p[1]-1,p[2],q[0],q[1]).getTime(),due=at-e.remind*6e4,key=e.id+'|'+e.date+'|'+(e.time||'')+'|'+e.remind;
     if(f[key]||now<due||now>at+216e5||(e.created&&e.created>due))return;
-    f[key]=now;ch=true;const body=(e.time?e.time+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
+    f[key]=now;ch=true;const body=(e.time?fT(e.time)+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
     toast(e.title+' · '+body);notify(e.title,body,key)});
   if(ch){const ks=Object.keys(f);if(ks.length>300)ks.slice(0,ks.length-300).forEach(k=>delete f[k]);try{localStorage.setItem('dpFired',JSON.stringify(f))}catch(e){}}}
 setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
-cform(false);renderBoards();renderCh();wformR();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
+
+/* ---------- Settings: language, time format, time region, week start, notifications ---------- */
+const TZS=['','Africa/Algiers','Africa/Cairo','Africa/Casablanca','Africa/Tunis','Africa/Lagos','Africa/Johannesburg','Europe/London','Europe/Paris','Europe/Berlin','Europe/Istanbul','Asia/Riyadh','Asia/Dubai','Asia/Kolkata','Asia/Shanghai','Asia/Tokyo','Australia/Sydney','America/New_York','America/Chicago','America/Los_Angeles','America/Sao_Paulo'];
+let _lg=null;
+function applyS(){const p=prs[0]||{};S.lang=p.lang||'en';S.tf=p.tf||'24';S.tz=p.tz||'';S.ws=p.ws||0;S.notif=p.notif!==false;setDN();
+  if(_lg!==S.lang){_lg=S.lang;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';setTimeout(tr,0)}}
+function settingsHtml(){let dz='';try{dz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
+  const ch=(on,a,v,l)=>'<button class="chip'+(on?' on':'')+'" data-'+a+'="'+v+'">'+l+'</button>';
+  return '<h2>Settings</h2><div class="add"><div class="row"><label>Language <select id="sl">'+[['en','English'],['fr','Français'],['ar','العربية']].map(x=>'<option value="'+x[0]+'"'+(S.lang===x[0]?' selected':'')+'>'+x[1]+'</option>').join('')+'</select></label></div>'+
+  '<div class="row"><label>Time format</label>'+ch(S.tf==='12','tf','12','12-hour')+ch(S.tf!=='12','tf','24','24-hour')+'</div>'+
+  '<div class="row"><label>Time region <select id="stz">'+TZS.map(z=>'<option value="'+z+'"'+(S.tz===z?' selected':'')+'>'+(z?z.replace(/_/g,' '):'Device default ('+dz+')')+'</option>').join('')+'</select></label></div>'+
+  '<div class="row"><label>Week starts on</label>'+ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday')+'</div>'+
+  '<div class="row"><label>Notifications</label>'+ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny')+'</div></div>'}
+const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
+`Today|Aujourd'hui|اليوم
+Boards|Tableaux|اللوحات
+Challenges|Défis|التحديات
+Week|Semaine|الأسبوع
+Month|Mois|الشهر
+Profile|Profil|الملف الشخصي
+Search tasks|Rechercher des tâches|ابحث في المهام
+Add a task for this day|Ajouter une tâche pour ce jour|أضف مهمة لهذا اليوم
+Important|Important|مهم
+Urgent|Urgent|عاجل
+Add|Ajouter|إضافة
+Done|Terminé|منجز
+Overdue|En retard|متأخرة
+All|Toutes|الكل
+High|Haute|عالية
+Medium|Moyenne|متوسطة
+Low|Basse|منخفضة
+Schedule|Emploi du temps|الجدول
+Progress|Progression|التقدم
+Next class|Prochain cours|الحصة القادمة
+Importance and urgency|Importance et urgence|الأهمية والاستعجال
+Do first|À faire d'abord|ابدأ بهذا
+Plan|Planifier|خطط
+Quick|Rapide|سريع
+Later|Plus tard|لاحقًا
+Nothing planned for this day.|Rien de prévu ce jour.|لا شيء مخطط لهذا اليوم.
+Add your first task above.|Ajoutez votre première tâche ci-dessus.|أضف أول مهمة بالأعلى.
++ New task|+ Nouvelle tâche|+ مهمة جديدة
++ New card|+ Nouvelle carte|+ بطاقة جديدة
++ New challenge|+ Nouveau défi|+ تحدٍّ جديد
++ Add routine|+ Ajouter une routine|+ إضافة روتين
++ New event|+ Nouvel événement|+ حدث جديد
++ Add task|+ Ajouter une tâche|+ إضافة مهمة
+Edit task|Modifier la tâche|تعديل المهمة
+Task|Tâche|مهمة
+Date|Date|التاريخ
+Time|Heure|الوقت
+Deadline|Échéance|الموعد النهائي
+Clear|Effacer|مسح
+Checklist|Liste de contrôle|قائمة التحقق
+Add an item and press Enter|Ajoutez un élément puis Entrée|أضف عنصرًا واضغط Enter
+Cancel|Annuler|إلغاء
+Save|Enregistrer|حفظ
+Delete|Supprimer|حذف
+Delete this task?|Supprimer cette tâche ?|حذف هذه المهمة؟
+Log out|Se déconnecter|تسجيل الخروج
+‹ Back|‹ Retour|‹ رجوع
+Appearance|Apparence|المظهر
+Auto|Auto|تلقائي
+Light|Clair|فاتح
+Dark|Sombre|داكن
+Your data|Vos données|بياناتك
+Account|Compte|الحساب
+Settings|Paramètres|الإعدادات
+Language|Langue|اللغة
+Time format|Format de l'heure|تنسيق الوقت
+12-hour|12 h|12 ساعة
+24-hour|24 h|24 ساعة
+Time region|Fuseau horaire|المنطقة الزمنية
+Week starts on|La semaine commence le|يبدأ الأسبوع يوم
+Sunday|Dimanche|الأحد
+Monday|Lundi|الاثنين
+Notifications|Notifications|الإشعارات
+Allow|Autoriser|السماح
+Deny|Refuser|رفض
+Rename board|Renommer le tableau|إعادة تسمية اللوحة
+Delete board|Supprimer le tableau|حذف اللوحة
+Edit|Modifier|تعديل
+Mark as done|Marquer comme terminé|وضع علامة منجز
+Mark as not done|Marquer comme non terminé|وضع علامة غير منجز
+Plan for today|Planifier pour aujourd'hui|خطط لليوم
+Move to|Déplacer vers|نقل إلى
+Rename card|Renommer la carte|إعادة تسمية البطاقة
+Move left|Déplacer à gauche|انقل لليسار
+Move right|Déplacer à droite|انقل لليمين
+Delete card|Supprimer la carte|حذف البطاقة
+No deadline|Sans échéance|بدون موعد نهائي
+Due today|Échéance aujourd'hui|مستحقة اليوم
+Due tomorrow|Échéance demain|مستحقة غدًا
+Your name|Votre nom|اسمك`.split('\n').forEach(l=>{const r=l.split('|');DICT[r[0]]={fr:r[1],ar:r[2]}});
+function trs(x){if(S.lang==='en')return x;const m=x.match(/^(\s*)([\s\S]*?)(\s*)$/),k=m[2],d=DICT[k];if(d&&d[S.lang])return m[1]+d[S.lang]+m[3];
+  for(const p of PAT){const r=p[0].exec(k);if(r)return m[1]+p[S.lang==='fr'?1:2].replace(/\$(\d)/g,(_,i)=>r[i])+m[3]}return x}
+const OT=new WeakMap();let _trd=false,_raf=0;
+function tr(){if(S.lang!=='en')_trd=true;if(!_trd)return;
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});let n;
+  while(n=w.nextNode()){const r=OT.get(n),src=r&&n.data===r.t?r.o:n.data,out=trs(src);if(out!==n.data)n.data=out;OT.set(n,{o:src,t:out})}
+  document.querySelectorAll('[placeholder],[aria-label]').forEach(el=>['placeholder','aria-label'].forEach(a=>{const v=el.getAttribute(a);if(v==null)return;const k='_o'+a,rr=el[k],src=rr&&v===rr.t?rr.o:v,out=trs(src);if(out!==v)el.setAttribute(a,out);el[k]={o:src,t:out}}))}
+new MutationObserver(()=>{cancelAnimationFrame(_raf);_raf=requestAnimationFrame(tr)}).observe(document.body,{childList:true,subtree:true,characterData:true});
+applyS();cform(false);renderBoards();renderCh();wformR();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
 try{const t=localStorage.getItem('dpTheme');if(t)applyTheme(t)}catch(e){}applyTheme(theme);document.body.dataset.v='today';
 </script></body></html>
