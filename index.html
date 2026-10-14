@@ -225,7 +225,7 @@ h2{font-size:16px;font-weight:700;color:var(--tx);margin:20px 0 8px}h2.od{color:
 .ac2 .go{width:100%;height:46px;margin:0;border-radius:12px}
 .ac2 .lk2{text-align:center;font-size:14px;padding:4px}
 .err.good{color:var(--ok)}
-#dlg,#edl{position:fixed;inset:0;z-index:60;background:rgba(10,6,30,.55);display:flex;align-items:center;justify-content:center;padding:20px;animation:fd .15s ease}
+#dlg,#edl,#rnd{position:fixed;inset:0;z-index:60;background:rgba(10,6,30,.55);display:flex;align-items:center;justify-content:center;padding:20px;animation:fd .15s ease}
 .dbx{width:100%;max-width:340px;background:var(--card);border-radius:22px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.45);animation:pp .18s cubic-bezier(.2,.9,.3,1.1)}
 .dbx>b{font-size:17px;display:block;margin-bottom:6px}.dbx p{margin:0 0 6px;color:var(--mu);font-size:14px;overflow-wrap:anywhere}
 .dr{display:flex;gap:10px;margin-top:14px}.dr button{flex:1;height:44px;border-radius:14px;border:0;font-weight:600;font-size:15px;background:var(--acb);color:var(--ac)}
@@ -245,6 +245,36 @@ h2{font-size:16px;font-weight:700;color:var(--tx);margin:20px 0 8px}h2.od{color:
 .cd{min-height:92px;display:flex;flex-direction:column;justify-content:space-between}
 .dd.cur{box-shadow:inset 0 0 0 2px var(--ac)}
 @media (max-width:899px){.cols{scroll-snap-type:x mandatory;scroll-padding:0 12px}.col,.col.ns{flex-basis:min(300px,82vw);width:min(300px,82vw)}}
+/* ---- Trello-style compact lists and cards, 3-dot menus, reminders ---- */
+.col,.col.ns{height:auto;max-height:calc(100vh - 230px);align-self:flex-start;padding:10px 8px 8px}
+.col .cl{flex:0 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin:0;padding:2px}
+.col .hh{padding:2px 2px 10px 8px}
+.col h3{font-size:15px;font-weight:700;color:var(--tx)}
+.cd{min-height:0;margin:0;padding:8px 4px 8px 10px;border-radius:10px;flex-direction:row;justify-content:flex-start;align-items:flex-start;gap:8px;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.22)}
+.cd .cb{width:22px;height:22px;border-radius:50%;font-size:13px;margin-top:1px}
+.cd.done .cb{background:var(--ok);border-color:var(--ok)}
+.cd .m{flex:1;min-width:0;font-size:14px;line-height:1.35;padding-top:1px}
+.cd .tags{margin-top:4px}
+.d3{width:30px;height:30px;border:0;background:transparent;color:var(--mu);border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none;padding:0}
+.d3:hover{background:var(--acb);color:var(--ac)}
+.cd .d3{width:28px;height:28px}
+.col .mini{border:0;background:transparent;height:38px;text-align:left;color:var(--tx);margin-top:4px}
+.col .mini:focus{background:var(--bg);outline:2px solid var(--ac)}
+.col.ns{background:transparent;border:1px dashed var(--bd);box-shadow:none}
+.bc{display:inline-flex;align-items:center;border:1px solid var(--bd);border-radius:20px;overflow:hidden;background:transparent}
+.bc.on{background:var(--acb);border-color:var(--ac)}
+.bc .chip,.bc .chip.on{border:0;background:transparent;padding:0 4px 0 14px}
+.bc.on .chip{color:var(--ac)}
+.bc .d3{height:36px;width:32px;border-radius:0}
+#mnu{position:fixed;z-index:70;min-width:190px;max-width:260px;max-height:70vh;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:6px}
+#mnu button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-size:14px;color:var(--tx)}
+#mnu button:hover{background:var(--acb)}
+#mnu button.dg{color:var(--dg)}
+#mnu small{display:block;padding:8px 12px 2px;color:var(--mu);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+#rnk{background:var(--btn);color:#fff}
+.add select{height:36px;border:1px solid var(--bd);border-radius:18px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:0 10px;max-width:100%}
+option{background:var(--card);color:var(--tx)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);top:84px;z-index:80;max-width:min(420px,92vw);background:var(--btn);color:#fff;padding:12px 18px;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.4);font-size:14px;font-weight:600;text-align:center}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -270,6 +300,8 @@ h2{font-size:16px;font-weight:700;color:var(--tx);margin:20px 0 8px}h2.od{color:
 <nav class="nav"><div class="logo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>Planner</div><button class="on" data-v="today"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span>Today</span></button><button data-v="boards"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>Boards</span></button><button data-v="ch"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.500 0 2 1 3 2 3 0-3-1-6 1-8.500z"/></svg><span>Challenges</span></button><button data-v="wk"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h3"/></svg><span>Week</span></button><button data-v="mo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg><span>Month</span></button><div class="sp"></div><div class="sy" id="sy"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A5.500 5.500 0 0 1 17 9a3.500 3.500 0 0 1 .5 9z"/><path d="M9.500 13.500l2 2 3.500-3.500"/></svg> Not saved</div><button class="me" data-v="pf"><span class="avs" id="av2">?</span><span id="mn">Profile</span></button></nav><button id="fab" aria-label="Add">+</button>
 <div id="dlg" hidden><div class="dbx" role="alertdialog" aria-modal="true"><b id="dt"></b><p id="dm"></p><div class="dr"><button id="dc">Cancel</button><button id="dk">Delete</button></div></div></div>
 <div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
+<div id="rnd" hidden><div class="dbx ebx" role="dialog" aria-modal="true"><b id="rnt">Rename</b><input type="text" id="rni" maxlength="60"><div class="dr"><button id="rnc">Cancel</button><button id="rnk">Save</button></div></div></div>
+<div id="toast" hidden role="status"></div>
 <script>
 const $=s=>document.querySelector(s);
 const ymd=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
@@ -308,7 +340,7 @@ function render(){
 }
 function add(){const v=$('#in').value.trim();if(!v)return;
   write({type:'task',id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:v,date:sel,time:$('#tm').value||'',important:imp,urgent:urg,done:false,updatedAt:Date.now()});
-  $('#in').value='';$('#tm').value='';imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
+  $('#in').value='';tmTouched=false;fillTm();imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
 $('#go').onclick=add;$('#in').onkeydown=e=>{if(e.key==='Enter')add()};
 $('#imp').onclick=e=>{imp=!imp;e.currentTarget.classList.toggle('on',imp)};
 $('#urg').onclick=e=>{urg=!urg;e.currentTarget.classList.toggle('on',urg)};
@@ -400,21 +432,24 @@ function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle
 document.querySelector('.nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
 
 /* ---------- Boards: board > cards > tasks ---------- */
-const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="r2"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+'</div></div><div class="tags">'+(t.date?'<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>':'<button class="tg lk" data-a="pt">Plan today</button>')+'</div><div class="mv"><button data-a="ml" aria-label="Move to previous card">‹</button><button data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button data-a="rm" aria-label="Delete task">'+TRASH+'</button><button data-a="mr" aria-label="Move to next card">›</button></div></div>';
+const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(t.date?'<div class="tags"><span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span></div>':'')+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
 function renderBoards(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#bv input')&&a.value)return;
   const bd=boards.slice().sort((x,y)=>x.created-y.created);
   if(!bd.find(b=>b.id===selB))selB=bd[0]?bd[0].id:null;
   const B=bd.find(b=>b.id===selB);
-  let h='<div class="row bch">'+bd.map(b=>'<button class="chip'+(b.id===selB?' on':'')+'" data-b="'+b.id+'">'+esc(b.name)+'</button>').join('')+(addingB||!bd.length?'<input type="text" id="nb" class="mini" placeholder="New board name" maxlength="40">':'<button class="chip" data-a="newb">+ Board</button>')+'</div>';
+  let h='<div class="row bch">'+bd.map(b=>'<span class="bc'+(b.id===selB?' on':'')+'"><button class="chip'+(b.id===selB?' on':'')+'" data-b="'+b.id+'">'+esc(b.name)+'</button><button class="d3" data-a="bm" data-id="'+b.id+'" aria-label="Board options">'+DOTS+'</button></span>').join('')+(addingB||!bd.length?'<input type="text" id="nb" class="mini" placeholder="New board name" maxlength="40">':'<button class="chip" data-a="newb">+ Board</button>')+'</div>';
   if(!B)h+='<div class="empty">Create your first board, for example Studies, Work or Health.</div>';
   else{const ts=tasks.filter(t=>t.boardId===B.id),n=B.stages.length;
     h+='<div class="cols">'+B.stages.map(s=>{const cs=ts.filter(t=>t.stageId===s.id).sort((x,y)=>x.updatedAt-y.updatedAt);
-      return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+' <span>'+cs.length+'</span></h3><button class="x" data-a="dcol" aria-label="Delete card">'+TRASH+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')+'<div class="rowx"><button class="chip" data-a="dbd">'+'Delete board'+'</button></div>'}
+      return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+' <span>'+cs.length+'</span></h3><button class="d3" data-a="lm" aria-label="Card options">'+DOTS+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')}
   $('#bv').innerHTML=h;
   if(fc){const el=$('#bv '+fc);fc=null;if(el)el.focus()}
 }
 $('#bv').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.cd .m');if(m)openEdit(m.closest('.cd').dataset.id);return}const k=b.dataset.a;
+  if(k==='bm')return boardMenu(b,b.dataset.id);
+  if(k==='lm')return listMenu(b,b.closest('.col').dataset.s);
+  if(k==='km')return taskMenu(b,b.closest('.cd').dataset.id);
   if(b.dataset.b){selB=b.dataset.b;armed=null;renderBoards();return}
   if(k==='newb'){addingB=true;renderBoards();const n=$('#nb');if(n)n.focus();return}
   const B=boards.find(x=>x.id===selB);if(!B)return;
@@ -496,7 +531,7 @@ function renderWk(){const t0=new Date(),a=new Date(t0.getFullYear(),t0.getMonth(
   '<div class="wc2"><div><h2>Goals</h2>'+(goals||'<div class="cnt">No goals yet.</div>')+'</div><div><h2>Weekly routine</h2>'+(rows||'<div class="cnt">No routines yet. Add classes, work hours or the gym.</div>')+'</div></div>'}
 function wformR(){const D7=DN.map((n,i)=>'<button class="chip dy" data-d="'+i+'">'+n+'</button>').join('');
   const seg=m=>'<div class="row"><button class="chip'+(m==='s'?' on':'')+'" data-a="ns">Routine</button><button class="chip'+(m==='g'?' on':'')+'" data-a="ng">Goal</button></div>';
-  $('#wf').innerHTML=wform==='s'?'<div class="add">'+seg('s')+'<input type="text" id="ws" placeholder="Subject, e.g. ML2 or Gym" maxlength="60"><div class="row"><button class="chip kd on" data-k="study">School or work</button><button class="chip kd" data-k="personal">Personal</button></div><div class="row">'+D7+'</div><div class="row"><label>From <input type="time" id="wst"></label><label>To <input type="time" id="wen"></label></div><div class="row"><input class="sm" type="text" id="wr" placeholder="Room" maxlength="20"><input class="sm" type="text" id="wtc" placeholder="Teacher" maxlength="40"></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="sc">Save routine</button></div></div>':
+  $('#wf').innerHTML=wform==='s'?'<div class="add">'+seg('s')+'<input type="text" id="ws" placeholder="Subject, e.g. ML2 or Gym" maxlength="60"><div class="row"><button class="chip kd on" data-k="study">School or work</button><button class="chip kd" data-k="personal">Personal</button></div><div class="row">'+D7+'</div><div class="row"><label>From <input type="time" id="wst" value="'+nowHM()+'"></label><label>To <input type="time" id="wen" value="'+nowHM(1)+'"></label></div><div class="row"><input class="sm" type="text" id="wr" placeholder="Room" maxlength="20"><input class="sm" type="text" id="wtc" placeholder="Teacher" maxlength="40"></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="sc">Save routine</button></div></div>':
   wform==='g'?'<div class="add">'+seg('g')+'<input type="text" id="gt" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>From <input type="date" id="gs" value="'+today()+'"></label><label>To <input type="date" id="ge"></label></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="gc">Save goal</button></div></div>':
   '<button class="addb" data-a="ns">+ Add routine or goal</button>';
   const f=$(wform==='s'?'#ws':wform==='g'?'#gt':'#nothing');if(f)f.focus()}
@@ -531,10 +566,10 @@ function renderMo(){
   const pre=mY+'-'+String(mM+1).padStart(2,'0')+'-',mlist=evs.filter(e=>e.date.startsWith(pre)).sort((a,b)=>a.date.localeCompare(b.date)).map(e=>'<div class="t"><div class="m"><b>'+fmt(e.date,{day:'numeric',month:'short'})+'</b> · '+esc(e.title)+'</div></div>').join('')||'<div class="cnt" style="margin:0">No events this month.</div>';
   const ev=evOn(mSel),ts=tasks.filter(t=>t.date===mSel),gs=gls.filter(g=>g.end===mSel);
   $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(undefined,{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
-  ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+e.time+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
+  ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+e.time+'</span>':'')+(e.remind!=null?' <span class="tg">Reminder · '+remLbl(e.remind)+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
   ts.map(t=>'<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="m">'+esc(t.title)+'</div></div>').join('')+gs.map(g=>'<div class="t"><div class="m">Goal ends: '+esc(g.title)+'</div></div>').join('')+
-  '<div class="add"><input type="text" id="me" placeholder="Add an event for this day" maxlength="100"><div class="row"><input type="time" id="mt"><button class="go" data-a="ae">Add</button></div></div><button class="chip" data-a="od">Open this day</button></div></div>'}
-function addEv(){const v=$('#me').value.trim();if(!v)return;const t=$('#mt').value;$('#me').value='';save({type:'event',id:gid('e'),title:v,date:mSel,time:t||'',created:Date.now()})}
+  '<div class="add"><input type="text" id="me" placeholder="Add an event for this day" maxlength="100"><div class="row"><input type="time" id="mt" value="'+(mtV||nowHM())+'" aria-label="Time"><select id="mr" aria-label="Reminder">'+REM.map(r=>'<option value="'+r[0]+'"'+(String(mrV)===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="go" data-a="ae">Add</button></div></div><button class="chip" data-a="od">Open this day</button></div></div>'}
+function addEv(){const v=$('#me').value.trim();if(!v)return;const t=$('#mt').value,r=$('#mr').value;$('#me').value='';mtV=null;mrV='';save({type:'event',id:gid('e'),title:v,date:mSel,time:t||'',remind:r===''?null:+r,created:Date.now()})}
 $('#mv2').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.t[data-id] .m');if(m)openEdit(m.closest('.t').dataset.id);return}const k=b.dataset.a;
   if(b.dataset.d){mSel=b.dataset.d;renderMo();return}
   if(k==='mp'||k==='mn'){mM+=k==='mn'?1:-1;if(mM<0){mM=11;mY--}if(mM>11){mM=0;mY++}mSel=mY+'-'+String(mM+1).padStart(2,'0')+'-01';renderMo();return}
@@ -637,6 +672,68 @@ function renderSide(){
   const n=new Date(),h2=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2),nx=isT?dayR(n.getDay()).find(r=>r.end>h2):null;
   $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Next class</h2>'+(nx?'<div class="se '+(nx.kind==='personal'?'kg':'kb')+'"><b>'+esc(nx.subject)+'</b><div>'+nx.start+'–'+nx.end+'</div><div>'+esc([nx.room].filter(Boolean).join(' · '))+'</div></div>':'<div class="cnt" style="margin:0">Nothing else scheduled today.</div>')+
   '<h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'}
+/* ---------- 3-dot menus, rename dialog, reminders, current-time defaults ---------- */
+const DOTS='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+const pad2=n=>String(n).padStart(2,'0');
+const nowHM=p=>{const d=new Date();let h=d.getHours(),m=d.getMinutes();if(p){h+=p;if(h>23){h=23;m=59}}return pad2(h)+':'+pad2(m)};
+let mnuEl=null,rnfn=null,tmTouched=false,mtV=null,mrV='';
+const REM=[['','No reminder'],['0','At time of event'],['5','5 min before'],['10','10 min before'],['30','30 min before'],['60','1 hour before'],['1440','1 day before']];
+const remLbl=m=>(REM.find(r=>r[0]===String(m))||['',m+' min before'])[1];
+function closeMenu(){if(mnuEl){mnuEl.remove();mnuEl=null}}
+function openMenu(btn,items){closeMenu();const m=document.createElement('div');m.id='mnu';
+  items.forEach(it=>{if(it.h){const s=document.createElement('small');s.textContent=it.h;m.appendChild(s);return}
+    const b=document.createElement('button');b.textContent=it.l;if(it.d)b.className='dg';b.onclick=ev=>{ev.stopPropagation();closeMenu();it.fn()};m.appendChild(b)});
+  document.body.appendChild(m);mnuEl=m;
+  const r=btn.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
+  let x=r.right-w;if(x+w>innerWidth-8)x=innerWidth-w-8;if(x<8)x=8;
+  let y=r.bottom+4;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-4);
+  m.style.left=x+'px';m.style.top=y+'px'}
+document.addEventListener('click',e=>{if(mnuEl&&!mnuEl.contains(e.target)&&!e.target.closest('.d3'))closeMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+window.addEventListener('resize',closeMenu);document.addEventListener('scroll',closeMenu,true);
+function renameDlg(title,val,fn){rnfn=fn;$('#rnt').textContent=title;const i=$('#rni');i.value=val;$('#rnd').hidden=false;i.focus();i.select()}
+function rnClose(){$('#rnd').hidden=true;rnfn=null}
+function rnSave(){const v=$('#rni').value.trim();if(!v){$('#rni').focus();return}const f=rnfn;rnClose();if(f)f(v)}
+$('#rnc').onclick=rnClose;$('#rnk').onclick=rnSave;$('#rnd').onclick=e=>{if(e.target.id==='rnd')rnClose()};
+$('#rnd').onkeydown=e=>{if(e.key==='Enter')rnSave();if(e.key==='Escape')rnClose()};
+function boardMenu(btn,id){const B=boards.find(x=>x.id===id);if(!B)return;
+  openMenu(btn,[{l:'Rename board',fn:()=>renameDlg('Rename board',B.name,v=>save({...B,name:v}))},
+    {l:'Delete board',d:1,fn:()=>ask('Delete this board?','The board, its cards and all their tasks will be removed.',()=>drop(B))}])}
+function listMenu(btn,sid){const B=boards.find(x=>x.id===selB);if(!B)return;const i=B.stages.findIndex(s=>s.id===sid);if(i<0)return;const s=B.stages[i];
+  const mv=j=>{const a=B.stages.slice();a.splice(j,0,a.splice(i,1)[0]);save({...B,stages:a})};
+  const it=[{l:'Rename card',fn:()=>renameDlg('Rename card',s.name,v=>save({...B,stages:B.stages.map(x=>x.id===sid?{...x,name:v}:x)}))}];
+  if(i>0)it.push({l:'Move left',fn:()=>mv(i-1)});
+  if(i<B.stages.length-1)it.push({l:'Move right',fn:()=>mv(i+1)});
+  it.push({l:'Delete card',d:1,fn:()=>ask('Delete this card?','The card and all its tasks will be removed.',()=>{tasks.filter(t=>t.stageId===sid).forEach(t=>remove(t.id));save({...B,stages:B.stages.filter(x=>x.id!==sid)})})});
+  openMenu(btn,it)}
+function taskMenu(btn,id){const B=boards.find(x=>x.id===selB),t=tasks.find(x=>x.id===id);if(!t||!B)return;
+  const it=[{l:'Edit',fn:()=>openEdit(id)},{l:t.done?'Mark as not done':'Mark as done',fn:()=>write({...t,done:!t.done,doneAt:t.done?null:Date.now(),updatedAt:Date.now()})}];
+  if(!t.date)it.push({l:'Plan for today',fn:()=>write({...t,date:today(),updatedAt:Date.now()})});
+  const others=B.stages.filter(s=>s.id!==t.stageId);
+  if(others.length){it.push({h:'Move to'});others.forEach(s=>it.push({l:s.name,fn:()=>write({...t,stageId:s.id,updatedAt:Date.now()})}))}
+  it.push({l:'Delete',d:1,fn:()=>ask('Delete this task?',t.title,()=>remove(id))});
+  openMenu(btn,it)}
+/* current time shown by default in the time field, until the user changes it */
+function fillTm(){const t=$('#tm');if(t&&!tmTouched)t.value=nowHM()}
+$('#tm').addEventListener('input',()=>{tmTouched=true});
+setInterval(fillTm,30000);fillTm();
+$('#mv2').addEventListener('input',e=>{if(e.target.id==='mt')mtV=e.target.value;else if(e.target.id==='mr'){mrV=e.target.value;if(mrV!=='')askNotif()}});
+/* event reminders: notification while the app is open, plus an in-app banner */
+function askNotif(){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>{t.hidden=true},9000)}
+function firedMap(){try{return JSON.parse(localStorage.getItem('dpFired')||'{}')}catch(e){return{}}}
+const remShort=m=>m>=1440?'1 day':m>=60?(m/60)+(m===60?' hour':' hours'):m+' min';
+function notify(title,body,tag){try{if(!('Notification' in window)||Notification.permission!=='granted')return;
+  const plain=()=>new Notification(title,{body,tag,icon:'icon-192.png'});
+  if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(r=>r?r.showNotification(title,{body,tag,icon:'icon-192.png'}):plain()).catch(()=>{try{plain()}catch(e){}});else plain()}catch(e){}}
+function checkRem(){const now=Date.now(),f=firedMap();let ch=false;
+  evs.forEach(e=>{if(e.remind==null||!e.date)return;
+    const p=e.date.split('-').map(Number),q=(e.time||'09:00').split(':').map(Number),at=new Date(p[0],p[1]-1,p[2],q[0],q[1]).getTime(),due=at-e.remind*6e4,key=e.id+'|'+e.date+'|'+(e.time||'')+'|'+e.remind;
+    if(f[key]||now<due||now>at+216e5||(e.created&&e.created>due))return;
+    f[key]=now;ch=true;const body=(e.time?e.time+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
+    toast(e.title+' · '+body);notify(e.title,body,key)});
+  if(ch){const ks=Object.keys(f);if(ks.length>300)ks.slice(0,ks.length-300).forEach(k=>delete f[k]);try{localStorage.setItem('dpFired',JSON.stringify(f))}catch(e){}}}
+setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
 cform(false);renderBoards();renderCh();wformR();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
 try{const t=localStorage.getItem('dpTheme');if(t)applyTheme(t)}catch(e){}applyTheme(theme);document.body.dataset.v='today';
 </script></body></html>
