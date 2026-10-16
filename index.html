@@ -136,10 +136,7 @@ body{padding-left:200px}
 }
 #av{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:7;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--ac);background:var(--acb);color:var(--ac);font-weight:700;font-size:13px;padding:0}
 @media (max-width:899px){.app{padding-top:60px}}
-.pfh{display:flex;gap:14px;align-items:center;margin:16px 0}.pfh .m{flex:1;min-width:0}
 .bigav{width:64px;height:64px;border-radius:50%;background:var(--acb);color:var(--ac);border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex:none}
-#pv{max-width:560px}
-#pn{width:100%;height:42px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:inherit;font:inherit;font-size:18px;padding:0 10px}
 #wel .add{border-color:var(--ac)}
 .hd{position:fixed;top:0;left:0;right:0;z-index:6;background:var(--bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px}
 .hd .ht{flex:1;min-width:0;font-size:19px;font-weight:600;line-height:1.2}
@@ -277,6 +274,17 @@ option{background:var(--card);color:var(--tx)}
 #toast{position:fixed;left:50%;transform:translateX(-50%);top:84px;z-index:80;max-width:min(420px,92vw);background:var(--btn);color:#fff;padding:12px 18px;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.4);font-size:14px;font-weight:600;text-align:center}
 .ebx{max-height:90vh;overflow:auto}.ckh{margin-top:12px}.cli{display:flex;align-items:center;gap:8px;padding:4px 0}.cli .cb{width:22px;height:22px;border-radius:6px;font-size:13px}.cli .m{flex:1;overflow-wrap:anywhere;font-size:14px}.cli.done .m{color:var(--mu);text-decoration:line-through}.cli .x{width:30px;height:30px}
 @media(min-width:900px){[dir=rtl] body{padding-left:0;padding-right:200px}[dir=rtl] .nav{left:auto;right:0;border-right:0;border-left:1px solid var(--bd)}[dir=rtl] .hd{left:0;right:200px}}
+#pv{max-width:1100px}.pg{display:grid;gap:14px;margin-top:10px}
+.pc1{background:var(--card);border:1px solid var(--bd);border-radius:20px;box-shadow:var(--sh);padding:16px}
+.pic,.sri{display:flex;align-items:center;justify-content:center;flex:none;color:var(--ac)}.pic{width:40px;height:40px;border-radius:50%;background:var(--acb)}
+.pid,.prow,.pst .pc1{display:flex;align-items:center;gap:14px}.pid .m,.prow .m{flex:1;min-width:0}.pnm{font-size:20px}.pid input{width:100%;height:42px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:inherit;font:inherit;font-size:18px;padding:0 10px}
+.pst{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pst small,.prow small{display:block;color:var(--mu);font-size:13px}.pst b{font-size:24px}
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.pch{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:18px}
+.sr{display:grid;grid-template-columns:22px 118px minmax(0,1fr);align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--bd)}.sr .row{margin:0}.sr select{width:100%}
+.pc1 select{height:36px;border:1px solid var(--bd);border-radius:18px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:0 10px}
+.pc1 .chip.on{background:var(--btn);border-color:var(--btn);color:#fff}.pc1 .chip{display:inline-flex;align-items:center;gap:6px}
+@media(min-width:900px){.pbk{display:none}}
+@media(max-width:899px){.pcols{grid-template-columns:1fr}.pst{gap:6px}.pst .pc1{flex-direction:column;text-align:center;gap:4px;padding:12px 2px}.sr{grid-template-columns:22px 92px minmax(0,1fr);gap:8px}}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -673,17 +681,27 @@ $('#wel').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.a==='wskip'){welX=true;renderWel();return}
   if(b.dataset.a==='wsave'){const v=$('#wn').value.trim();if(!v){$('#wn').focus();return}savePref({name:v})}};
 $('#wel').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='wn'){const b=document.querySelector('[data-a=wsave]');if(b)b.click()}};
+let pfEd=false;
+const P={tasks:'<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 10h6M9 14h4"/>',boards:'<rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/>',cup:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',pal:'<path d="M12 3a9 9 0 1 0 0 18c1.500 0 2-1 1.500-2s0-2 1.500-2h2a4 4 0 0 0 4-4c0-5-4.500-10-9-10z"/><circle cx="8" cy="11" r="1"/><circle cx="12" cy="7.500" r="1"/><circle cx="16" cy="11" r="1"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',pin:'<path d="M12 21s-6-5.500-6-11a6 6 0 0 1 12 0c0 5.500-6 11-6 11z"/><circle cx="12" cy="10" r="2"/>',bell:'<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.500 2h-15zM10 21h4"/>',db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.700 3 3 7 3s7-1.300 7-3V6M5 12v6c0 1.700 3 3 7 3s7-1.300 7-3v-6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',out:'<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M15 8l4 4-4 4M19 12H9"/>'};
 function renderPf(){if(prs[0]&&prs[0].theme&&prs[0].theme!==theme)applyTheme(prs[0].theme);$('#av').textContent=ini(pn());$('#av2').textContent=ini(pn());$('#mn').textContent=pn()||'Profile';
   const a=document.activeElement;if(a&&a.id==='pn')return;
-  $('#pv').innerHTML='<button class="chip" data-a="pb">‹ Back</button><div class="pfh"><div class="bigav">'+esc(ini(pn()))+'</div><div class="m"><input type="text" id="pn" value="'+esc(pn())+'" placeholder="Your name" maxlength="40"><div class="cnt" style="margin:4px 0 0">'+(window.EMAIL?'Signed in as '+esc(window.EMAIL):'Not signed in')+'</div></div></div><h2>Appearance</h2><div class="row">'+['auto','light','dark'].map(x=>'<button class="chip'+(theme===x?' on':'')+'" data-th="'+x+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join('')+'</div>'+settingsHtml()+'<h2>Your data</h2><div class="cnt" style="margin:0">'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+rts.length+' routines · '+gls.length+' goals · '+evs.length+' events</div><h2>Account</h2><div class="cnt" style="margin:0">'+esc($('#st').textContent)+'</div><button class="chip" data-a="lo" style="margin-top:14px">Log out</button>'}
+  const t0=nowD(),w0=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()-wOff(t0)),wa=ymd(w0),wb=ymd(new Date(w0.getFullYear(),w0.getMonth(),w0.getDate()+6)),nw=tasks.filter(t=>t.date>=wa&&t.date<=wb).length;
+  const stat=(i,l,v)=>'<div class="pc1"><span class="pic">'+IC(P[i])+'</span><div><small>'+l+'</small><b>'+v+'</b></div></div>';
+  const hd=(i,l)=>'<h3 class="pch"><span class="pic">'+IC(P[i])+'</span>'+l+'</h3>';
+  $('#pv').innerHTML='<button class="chip pbk" data-a="pb">‹ Back</button><div class="pg"><div class="pc1 pid"><span class="bigav">'+esc(ini(pn()))+'</span><div class="m">'+(pfEd?'<input type="text" id="pn" value="'+esc(pn())+'" placeholder="Your name" maxlength="40">':'<b class="pnm">'+esc(pn()||'Your name')+'</b>')+'<div class="cnt" style="margin:2px 0 0">'+(window.EMAIL?esc(window.EMAIL):'Not signed in')+'</div></div><button class="chip" data-a="pe">'+(pfEd?'Save':PENCIL+' Edit profile')+'</button></div>'+
+  '<div class="pst">'+stat('tasks','Tasks',tasks.length)+stat('boards','Boards',boards.length)+stat('cup','Challenges',chs.length)+stat('cal','This week',nw||'–')+'</div>'+
+  '<div class="pcols"><div class="pc1">'+hd('pal','Appearance')+srow('pal','Theme',['auto','light','dark'].map(x=>'<button class="chip'+(theme===x?' on':'')+'" data-th="'+x+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join(''))+'</div><div class="pc1">'+hd('gear','Settings')+settingsHtml()+'</div></div>'+
+  '<div class="pc1 prow"><span class="pic">'+IC(P.db)+'</span><div class="m"><b>Your data</b><small>'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+rts.length+' routines · '+gls.length+' goals · '+evs.length+' events</small></div></div>'+
+  '<div class="pc1 prow"><span class="pic">'+IC(P.user)+'</span><div class="m"><b>Account</b><small>'+esc($('#st').textContent)+'</small></div><button class="chip" data-a="lo">'+IC(P.out)+' Log out</button></div></div>'}
 $('#pv').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.a==='pb'){show(lastV);return}
+  if(b.dataset.a==='pe'){if(pfEd){const i=$('#pn');if(i)savePref({name:i.value.trim()});pfEd=false;renderPf()}else{pfEd=true;renderPf();const i=$('#pn');if(i)i.focus()}return}
   if(b.dataset.a==='lo'){if(sb)sb.auth.signOut().then(()=>location.reload());return}
   if(b.dataset.tf){savePref({tf:b.dataset.tf});return}
   if(b.dataset.ws){savePref({ws:+b.dataset.ws});return}
   if(b.dataset.nt){const on=b.dataset.nt==='on';savePref({notif:on});if(on){askNotif();if(window.Notification&&Notification.permission==='denied')toast('Notifications are blocked in your browser settings.')}return}
   if(b.dataset.th){applyTheme(b.dataset.th);savePref({theme:b.dataset.th});return}};
-$('#pv').onchange=e=>{if(e.target.id==='sl')savePref({lang:e.target.value});if(e.target.id==='stz')savePref({tz:e.target.value});if(e.target.id==='pn')savePref({name:e.target.value.trim()})};
+$('#pv').onchange=e=>{if(e.target.id==='sl')savePref({lang:e.target.value});if(e.target.id==='stz')savePref({tz:e.target.value});if(e.target.id==='pn'){pfEd=false;savePref({name:e.target.value.trim()})}};
 $('#pv').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='pn')e.target.blur()};
 $('#av').onclick=()=>show('pf');
 function renderSide(){
@@ -761,13 +779,14 @@ const TZS=['','Africa/Algiers','Africa/Cairo','Africa/Casablanca','Africa/Tunis'
 let _lg=null;
 function applyS(){const p=prs[0]||{};S.lang=p.lang||'en';S.tf=p.tf||'24';S.tz=p.tz||'';S.ws=p.ws||0;S.notif=p.notif!==false;setDN();
   if(_lg!==S.lang){_lg=S.lang;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';setTimeout(tr,0)}}
+const srow=(i,l,c)=>'<div class="sr"><span class="sri">'+IC(P[i])+'</span><span>'+l+'</span><div class="row">'+c+'</div></div>';
 function settingsHtml(){let dz='';try{dz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
-  const ch=(on,a,v,l)=>'<button class="chip'+(on?' on':'')+'" data-'+a+'="'+v+'">'+l+'</button>';
-  return '<h2>Settings</h2><div class="add"><div class="row"><label>Language <select id="sl">'+[['en','English'],['fr','Français'],['ar','العربية']].map(x=>'<option value="'+x[0]+'"'+(S.lang===x[0]?' selected':'')+'>'+x[1]+'</option>').join('')+'</select></label></div>'+
-  '<div class="row"><label>Time format</label>'+ch(S.tf==='12','tf','12','12-hour')+ch(S.tf!=='12','tf','24','24-hour')+'</div>'+
-  '<div class="row"><label>Time region <select id="stz">'+TZS.map(z=>'<option value="'+z+'"'+(S.tz===z?' selected':'')+'>'+(z?z.replace(/_/g,' '):'Device default ('+dz+')')+'</option>').join('')+'</select></label></div>'+
-  '<div class="row"><label>Week starts on</label>'+ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday')+'</div>'+
-  '<div class="row"><label>Notifications</label>'+ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny')+'</div></div>'}
+  const ch=(on,k,v,l)=>'<button class="chip'+(on?' on':'')+'" data-'+k+'="'+v+'">'+l+'</button>',op=(v,l,on)=>'<option value="'+v+'"'+(on?' selected':'')+'>'+l+'</option>';
+  return srow('globe','Language','<select id="sl">'+[['en','English'],['fr','Français'],['ar','العربية']].map(x=>op(x[0],x[1],S.lang===x[0])).join('')+'</select>')+
+  srow('clock','Time format',ch(S.tf==='12','tf','12','12-hour')+ch(S.tf!=='12','tf','24','24-hour'))+
+  srow('pin','Time region','<select id="stz">'+TZS.map(z=>op(z,z?z.replace(/_/g,' '):'Device default ('+dz+')',S.tz===z)).join('')+'</select>')+
+  srow('cal','Week starts on',ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday'))+
+  srow('bell','Notifications',ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny'))}
 const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
 `Today|Aujourd'hui|اليوم
 Boards|Tableaux|اللوحات
@@ -848,7 +867,11 @@ Delete card|Supprimer la carte|حذف البطاقة
 No deadline|Sans échéance|بدون موعد نهائي
 Due today|Échéance aujourd'hui|مستحقة اليوم
 Due tomorrow|Échéance demain|مستحقة غدًا
-Your name|Votre nom|اسمك`.split('\n').forEach(l=>{const r=l.split('|');DICT[r[0]]={fr:r[1],ar:r[2]}});
+Your name|Votre nom|اسمك
+Edit profile|Modifier le profil|تعديل الملف
+Tasks|Tâches|المهام
+This week|Cette semaine|هذا الأسبوع
+Theme|Thème|السمة`.split('\n').forEach(l=>{const r=l.split('|');DICT[r[0]]={fr:r[1],ar:r[2]}});
 function trs(x){if(S.lang==='en')return x;const m=x.match(/^(\s*)([\s\S]*?)(\s*)$/),k=m[2],d=DICT[k];if(d&&d[S.lang])return m[1]+d[S.lang]+m[3];
   for(const p of PAT){const r=p[0].exec(k);if(r)return m[1]+p[S.lang==='fr'?1:2].replace(/\$(\d)/g,(_,i)=>r[i])+m[3]}return x}
 const OT=new WeakMap();let _trd=false,_raf=0;
