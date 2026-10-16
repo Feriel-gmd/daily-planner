@@ -290,6 +290,13 @@ option{background:var(--card);color:var(--tx)}
 #mnu2 button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-size:14px;color:var(--tx)}#mnu2 button:hover,#mnu button.hs:hover{background:var(--acb)}
 #mnu button.hs{display:flex;justify-content:space-between;align-items:center;gap:12px}[dir=rtl] #mnu button,[dir=rtl] #mnu2 button{text-align:right}
 .bnm{color:var(--mu);font-size:.85em}
+@media(max-width:899px){
+#pv{overflow-x:hidden}#pv *{min-width:0}.pg{gap:10px;margin-top:8px}.pc1{padding:14px;border-radius:18px}
+.pid{flex-wrap:wrap;gap:12px}.pid .bigav{width:56px;height:56px;font-size:20px}.pid .m{flex:1 1 140px;overflow-wrap:anywhere}.pnm{font-size:18px}.pid>.chip{margin-left:auto}
+.pst .pic{width:34px;height:34px}.pst small{font-size:11px}.pst b{font-size:20px}
+.pch{font-size:16px}.sr{grid-template-columns:22px 1fr;row-gap:8px;padding:12px 0}.sr .row{grid-column:1/-1}.sr select{width:100%}
+.prow{flex-wrap:wrap}.prow small{overflow-wrap:anywhere}.prow>.chip{margin-left:auto}
+}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
