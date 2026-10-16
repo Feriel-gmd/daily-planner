@@ -286,6 +286,9 @@ option{background:var(--card);color:var(--tx)}
 @media(min-width:900px){.pbk{display:none}}
 @media(max-width:899px){.pcols{grid-template-columns:1fr}.pst{gap:6px}.pst .pc1{flex-direction:column;text-align:center;gap:4px;padding:12px 2px}.sr{grid-template-columns:22px 92px minmax(0,1fr);gap:8px}}
 .ckb{height:5px;margin:6px 0 2px}.dfr{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.dfr .chip{height:32px;font-size:13px}.nth{margin:2px 0 0;font-size:12px}
+#mnu2{position:fixed;z-index:71;min-width:170px;max-width:240px;max-height:60vh;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:6px}
+#mnu2 button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-size:14px;color:var(--tx)}#mnu2 button:hover,#mnu button.hs:hover{background:var(--acb)}
+#mnu button.hs{display:flex;justify-content:space-between;align-items:center;gap:12px}[dir=rtl] #mnu button,[dir=rtl] #mnu2 button{text-align:right}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -721,18 +724,30 @@ const nowHM=p=>{const d=nowD();let h=d.getHours(),m=d.getMinutes();if(p){h+=p;if
 let mnuEl=null,rnfn=null,tmTouched=false,mtV=null,mrV='';
 const REM=[['','No reminder'],['0','At time of event'],['5','5 min before'],['10','10 min before'],['30','30 min before'],['60','1 hour before'],['1440','1 day before']];
 const remLbl=m=>(REM.find(r=>r[0]===String(m))||['',m+' min before'])[1];
-function closeMenu(){if(mnuEl){mnuEl.remove();mnuEl=null}}
+let subEl=null;
+function closeSub(){if(subEl){subEl.remove();subEl=null}}
+function closeMenu(){closeSub();if(mnuEl){mnuEl.remove();mnuEl=null}}
+function showSub(b,items){closeSub();const m=document.createElement('div');m.id='mnu2';
+  items.forEach(it=>{const x=document.createElement('button');x.textContent=it.l;x.onclick=ev=>{ev.stopPropagation();closeMenu();it.fn()};m.appendChild(x)});
+  document.body.appendChild(m);subEl=m;
+  const r=b.getBoundingClientRect(),pr=mnuEl.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
+  let x=pr.right+4;if(x+w>innerWidth-8)x=pr.left-w-4;if(x<8)x=8;
+  let y=r.top;if(y+h>innerHeight-8)y=Math.max(8,innerHeight-h-8);
+  m.style.left=x+'px';m.style.top=y+'px'}
 function openMenu(btn,items){closeMenu();const m=document.createElement('div');m.id='mnu';
   items.forEach(it=>{if(it.h){const s=document.createElement('small');s.textContent=it.h;m.appendChild(s);return}
-    const b=document.createElement('button');b.textContent=it.l;if(it.d)b.className='dg';b.onclick=ev=>{ev.stopPropagation();closeMenu();it.fn()};m.appendChild(b)});
+    const b=document.createElement('button');b.textContent=it.l;if(it.d)b.className='dg';
+    if(it.sub){b.classList.add('hs');const a=document.createElement('span');a.textContent='›';b.appendChild(a);b.onclick=ev=>{ev.stopPropagation();showSub(b,it.sub)};b.onmouseenter=()=>showSub(b,it.sub)}
+    else{b.onmouseenter=closeSub;b.onclick=ev=>{ev.stopPropagation();closeMenu();it.fn()}}
+    m.appendChild(b)});
   document.body.appendChild(m);mnuEl=m;
   const r=btn.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
   let x=r.right-w;if(x+w>innerWidth-8)x=innerWidth-w-8;if(x<8)x=8;
   let y=r.bottom+4;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-4);
   m.style.left=x+'px';m.style.top=y+'px'}
-document.addEventListener('click',e=>{if(mnuEl&&!mnuEl.contains(e.target)&&!e.target.closest('.d3'))closeMenu()});
+document.addEventListener('click',e=>{if(mnuEl&&!mnuEl.contains(e.target)&&!e.target.closest('.d3,#mnu2'))closeMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
-window.addEventListener('resize',closeMenu);document.addEventListener('scroll',closeMenu,true);
+window.addEventListener('resize',closeMenu);document.addEventListener('scroll',e=>{if(!(e.target.closest&&e.target.closest('#mnu,#mnu2')))closeMenu()},true);
 function renameDlg(title,val,fn){rnfn=fn;$('#rnt').textContent=title;const i=$('#rni');i.value=val;$('#rnd').hidden=false;i.focus();i.select()}
 function rnClose(){$('#rnd').hidden=true;rnfn=null}
 function rnSave(){const v=$('#rni').value.trim();if(!v){$('#rni').focus();return}const f=rnfn;rnClose();if(f)f(v)}
@@ -752,7 +767,7 @@ function taskMenu(btn,id){const B=boards.find(x=>x.id===selB),t=tasks.find(x=>x.
   const it=[{l:'Edit',fn:()=>openEdit(id)},{l:t.done?'Mark as not done':'Mark as done',fn:()=>write({...t,done:!t.done,doneAt:t.done?null:Date.now(),updatedAt:Date.now()})}];
   if(!t.date)it.push({l:'Plan for today',fn:()=>write({...t,date:today(),updatedAt:Date.now()})});
   const others=B.stages.filter(s=>s.id!==t.stageId);
-  if(others.length){it.push({h:'Move to'});others.forEach(s=>it.push({l:s.name,fn:()=>write({...t,stageId:s.id,updatedAt:Date.now()})}))}
+  if(others.length)it.push({l:'Move to',sub:others.map(s=>({l:s.name,fn:()=>write({...t,stageId:s.id,updatedAt:Date.now()})}))});
   it.push({l:'Delete',d:1,fn:()=>ask('Delete this task?',t.title,()=>remove(id))});
   openMenu(btn,it)}
 /* current time shown by default in the time field, until the user changes it */
