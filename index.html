@@ -285,6 +285,7 @@ option{background:var(--card);color:var(--tx)}
 .pc1 .chip.on{background:var(--btn);border-color:var(--btn);color:#fff}.pc1 .chip{display:inline-flex;align-items:center;gap:6px}
 @media(min-width:900px){.pbk{display:none}}
 @media(max-width:899px){.pcols{grid-template-columns:1fr}.pst{gap:6px}.pst .pc1{flex-direction:column;text-align:center;gap:4px;padding:12px 2px}.sr{grid-template-columns:22px 92px minmax(0,1fr);gap:8px}}
+.ckb{height:5px;margin:6px 0 2px}.dfr{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.dfr .chip{height:32px;font-size:13px}.nth{margin:2px 0 0;font-size:12px}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -299,8 +300,8 @@ option{background:var(--card);color:var(--tx)}
 <input type="text" id="in" placeholder="Add a task for this day" maxlength="200" autocomplete="off">
 <div class="row">
 <button class="chip" id="imp">Important</button><button class="chip u" id="urg">Urgent</button>
-<input type="time" id="tm" aria-label="Time"><button class="go" id="go">Add</button></div></div>
-<div id="sch"></div><div id="chT"></div><div id="seg" class="seg"></div><div id="list"></div><aside id="side"></aside></div>
+<input type="time" id="tm" aria-label="Time"><input type="date" id="dd" aria-label="Deadline" title="Deadline"><button class="go" id="go">Add</button></div></div>
+<div id="sch"></div><div id="chT"></div><div id="seg" class="seg"></div><div id="dff"></div><div id="list"></div><aside id="side"></aside></div>
 <div id="vBoards" hidden><div id="bv"></div></div>
 <div id="vCh" hidden><div id="cv"><div id="cf"></div><div id="cl"></div></div></div>
 <div id="vWk" hidden><div id="wl"></div><div id="wf"></div></div>
@@ -359,8 +360,8 @@ function render(){
   $('#list').innerHTML=h||'<div class="empty">Nothing planned for this day.<br>Add your first task above.</div>';
 }
 function add(){const v=$('#in').value.trim();if(!v)return;
-  write({type:'task',id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:v,date:sel,time:$('#tm').value||'',important:imp,urgent:urg,done:false,updatedAt:Date.now()});
-  $('#in').value='';tmTouched=false;fillTm();imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
+  write({type:'task',id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:v,date:sel,time:$('#tm').value||'',due:$('#dd').value||'',important:imp,urgent:urg,done:false,updatedAt:Date.now()});
+  $('#in').value='';$('#dd').value='';tmTouched=false;fillTm();imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
 $('#go').onclick=add;$('#in').onkeydown=e=>{if(e.key==='Enter')add()};
 $('#imp').onclick=e=>{imp=!imp;e.currentTarget.classList.toggle('on',imp)};
 $('#urg').onclick=e=>{urg=!urg;e.currentTarget.classList.toggle('on',urg)};
@@ -452,7 +453,7 @@ function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle
 document.querySelector('.nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
 
 /* ---------- Boards: board > cards > tasks ---------- */
-const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(()=>{const x=[];if(t.date)x.push('<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');[dueTag(t),clTag(t)].forEach(v=>{if(v)x.push(v)});return x.length?'<div class="tags">'+x.join('')+'</div>':''})()+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
+const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(()=>{const x=[];if(t.date)x.push('<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');[dueTag(t),clTag(t)].forEach(v=>{if(v)x.push(v)});return (x.length?'<div class="tags">'+x.join('')+'</div>':'')+(t.cl&&t.cl.length?'<div class="bar ckb"><i style="width:'+Math.round(t.cl.filter(v=>v.done).length/t.cl.length*100)+'%"></i></div>':'')})()+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
 function renderBoards(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#bv input')&&a.value)return;
   const bd=boards.slice().sort((x,y)=>x.created-y.created);
@@ -460,13 +461,13 @@ function renderBoards(){
   const B=bd.find(b=>b.id===selB);
   let h='<div class="row bch">'+bd.map(b=>'<span class="bc'+(b.id===selB?' on':'')+'"><button class="chip'+(b.id===selB?' on':'')+'" data-b="'+b.id+'">'+esc(b.name)+'</button><button class="d3" data-a="bm" data-id="'+b.id+'" aria-label="Board options">'+DOTS+'</button></span>').join('')+(addingB||!bd.length?'<input type="text" id="nb" class="mini" placeholder="New board name" maxlength="40">':'<button class="chip" data-a="newb">+ Board</button>')+'</div>';
   if(!B)h+='<div class="empty">Create your first board, for example Studies, Work or Health.</div>';
-  else{const ts=tasks.filter(t=>t.boardId===B.id),n=B.stages.length;
+  else{const ts=tasks.filter(t=>t.boardId===B.id&&dfOk(t)),n=B.stages.length;
     h+='<div class="cols">'+B.stages.map(s=>{const cs=ts.filter(t=>t.stageId===s.id).sort((x,y)=>x.updatedAt-y.updatedAt);
       return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+'</h3><button class="d3" data-a="lm" aria-label="Card options">'+DOTS+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')}
-  $('#bv').innerHTML=h;
+  $('#bv').innerHTML=(B?dfChips():'')+h;
   if(fc){const el=$('#bv '+fc);fc=null;if(el)el.focus()}
 }
-$('#bv').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.cd .m');if(m)openEdit(m.closest('.cd').dataset.id);return}const k=b.dataset.a;
+$('#bv').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.cd .m');if(m)openEdit(m.closest('.cd').dataset.id);return}if(b.dataset.df!==undefined){DF=b.dataset.df;render();return}const k=b.dataset.a;
   if(k==='bm')return boardMenu(b,b.dataset.id);
   if(k==='lm')return listMenu(b,b.closest('.col').dataset.s);
   if(k==='km')return taskMenu(b,b.closest('.cd').dataset.id);
@@ -598,9 +599,10 @@ $('#mv2').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target
   if(k==='od'){sel=mSel;show('today');render()}};
 $('#mv2').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='me')addEv()};
 /* ---------- Theme, week strip, priority filter ---------- */
-var PF=0;
+var PF=0,DF='';const dfOk=t=>!DF||dueSt(t)===DF;
+const dfChips=()=>'<div class="dfr">'+[['','All'],['over','Overdue'],['today','Due today'],['tmr','Due tomorrow'],['none','No deadline']].map(x=>'<button class="chip'+(DF===x[0]?' on':'')+'" data-df="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>';
 const lvl=t=>prio(t)===3?1:prio(t)>0?2:3;
-function pfOk(t){return !PF||lvl(t)===PF}
+function pfOk(t){return (!PF||lvl(t)===PF)&&dfOk(t)}
 let theme='auto';const T0=document.documentElement.getAttribute('data-theme');
 const MOON='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.500z"/></svg>';
 const SUN='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.600 5.600l1.400 1.400M17 17l1.400 1.400M5.600 18.400L7 17M17 7l1.400-1.400"/></svg>';
@@ -620,8 +622,9 @@ $('#strip').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   else if(b.dataset.a==='tt')sel=today();
   else{const d=new Date(sel+'T12:00');d.setDate(d.getDate()+(b.dataset.a==='nw'?7:-7));sel=ymd(d)}
   render()};
-function renderSeg(){$('#seg').innerHTML=['All','High','Medium','Low'].map((x,i)=>'<button class="'+(PF===i?'on':'')+'" data-p="'+i+'">'+x+'</button>').join('')}
-$('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;PF=+b.dataset.p;render()};
+function renderSeg(){$('#dff').innerHTML=dfChips();$('#seg').innerHTML=['All','High','Medium','Low'].map((x,i)=>'<button class="'+(PF===i?'on':'')+'" data-p="'+i+'">'+x+'</button>').join('')}
+$('#seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;PF=+b.dataset.p;render()}
+$('#dff').onclick=e=>{const b=e.target.closest('button');if(!b)return;DF=b.dataset.df;render()};;
 $('#fab').onclick=()=>$('#qa').click();
 /* ---------- Confirm and edit dialogs ---------- */
 let dfn=null,etask=null,ecl=[];
@@ -768,7 +771,7 @@ function notify(title,body,tag){try{if(S.notif===false)return;if(!('Notification
 function checkRem(){if(S.notif===false)return;const now=nowD().getTime(),f=firedMap();let ch=false;
   evs.forEach(e=>{if(e.remind==null||!e.date)return;
     const p=e.date.split('-').map(Number),q=(e.time||'09:00').split(':').map(Number),at=new Date(p[0],p[1]-1,p[2],q[0],q[1]).getTime(),due=at-e.remind*6e4,key=e.id+'|'+e.date+'|'+(e.time||'')+'|'+e.remind;
-    if(f[key]||now<due||now>at+216e5||(e.created&&e.created>due))return;
+    if(f[key]||now<due||now>at+216e5||(e.created&&e.created+(now-Date.now())>due))return;
     f[key]=now;ch=true;const body=(e.time?fT(e.time)+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
     toast(e.title+' · '+body);notify(e.title,body,key)});
   if(ch){const ks=Object.keys(f);if(ks.length>300)ks.slice(0,ks.length-300).forEach(k=>delete f[k]);try{localStorage.setItem('dpFired',JSON.stringify(f))}catch(e){}}}
@@ -786,8 +789,8 @@ function settingsHtml(){let dz='';try{dz=Intl.DateTimeFormat().resolvedOptions()
   srow('clock','Time format',ch(S.tf==='12','tf','12','12-hour')+ch(S.tf!=='12','tf','24','24-hour'))+
   srow('pin','Time region','<select id="stz">'+TZS.map(z=>op(z,z?z.replace(/_/g,' '):'Device default ('+dz+')',S.tz===z)).join('')+'</select>')+
   srow('cal','Week starts on',ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday'))+
-  srow('bell','Notifications',ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny'))}
-const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
+  srow('bell','Notifications',ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny'))+'<div class="cnt nth">Deny only mutes this app. To block the browser itself, use your browser site settings.</div>'}
+const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
 `Today|Aujourd'hui|اليوم
 Boards|Tableaux|اللوحات
 Challenges|Défis|التحديات
@@ -871,7 +874,50 @@ Your name|Votre nom|اسمك
 Edit profile|Modifier le profil|تعديل الملف
 Tasks|Tâches|المهام
 This week|Cette semaine|هذا الأسبوع
-Theme|Thème|السمة`.split('\n').forEach(l=>{const r=l.split('|');DICT[r[0]]={fr:r[1],ar:r[2]}});
+Theme|Thème|السمة
+Welcome back|Bon retour|مرحبًا بعودتك
+Log in to see your day|Connectez-vous pour voir votre journée|سجّل الدخول لرؤية يومك
+Log in|Se connecter|تسجيل الدخول
+Email|E-mail|البريد الإلكتروني
+Password|Mot de passe|كلمة المرور
+Forgot password?|Mot de passe oublié ?|نسيت كلمة المرور؟
+New here? Create an account|Nouveau ? Créer un compte|جديد؟ أنشئ حسابًا
+Create your account|Créez votre compte|أنشئ حسابك
+One place for your whole day|Un seul endroit pour toute votre journée|مكان واحد ليومك كله
+Create account|Créer le compte|إنشاء حساب
+Already have an account? Log in|Déjà un compte ? Connectez-vous|لديك حساب؟ سجّل الدخول
+Welcome to your planner|Bienvenue dans votre agenda|مرحبًا بك في مخططك
+Tell me your name. You can change it later in Profile.|Dites-nous votre nom. Vous pourrez le changer dans Profil.|أخبرني باسمك. يمكنك تغييره لاحقًا من الملف الشخصي.
+Skip for now|Passer pour l'instant|تخطّ الآن
+Synced|Synchronisé|تمت المزامنة
+Saving…|Enregistrement…|جارٍ الحفظ…
+Not saved|Non enregistré|غير محفوظ
+Error|Erreur|خطأ
+Not signed in|Non connecté|غير مسجّل الدخول
+Not signed in.|Non connecté.|غير مسجّل الدخول.
+Saved. Your tasks sync to your other devices.|Enregistré. Vos tâches se synchronisent sur vos autres appareils.|تم الحفظ. تتزامن مهامك مع أجهزتك الأخرى.
+Offline. Your changes are kept on this device and sync automatically.|Hors ligne. Vos modifications sont gardées sur cet appareil et synchronisées automatiquement.|غير متصل. تبقى تغييراتك على هذا الجهاز وتتزامن تلقائيًا.
+Create your first board, for example Studies, Work or Health.|Créez votre premier tableau, par exemple Études, Travail ou Santé.|أنشئ أول لوحة لك، مثل الدراسة أو العمل أو الصحة.
+Goals|Objectifs|الأهداف
+Weekly routine|Routine hebdomadaire|الروتين الأسبوعي
++ Add routine or goal|+ Ajouter une routine ou un objectif|+ إضافة روتين أو هدف
+Routine|Routine|روتين
+Goal|Objectif|هدف
+School or work|École ou travail|دراسة أو عمل
+Personal|Personnel|شخصي
+No goals yet.|Aucun objectif.|لا أهداف بعد.
+This month|Ce mois-ci|هذا الشهر
+No events this month.|Aucun événement ce mois-ci.|لا أحداث هذا الشهر.
+Add an event for this day|Ajouter un événement pour ce jour|أضف حدثًا لهذا اليوم
+No reminder|Aucun rappel|بلا تذكير
+At time of event|À l'heure de l'événement|عند موعد الحدث
+5 min before|5 min avant|قبل 5 دقائق
+10 min before|10 min avant|قبل 10 دقائق
+30 min before|30 min avant|قبل 30 دقيقة
+1 hour before|1 h avant|قبل ساعة
+1 day before|1 jour avant|قبل يوم
+Notifications are blocked in your browser settings.|Les notifications sont bloquées dans les paramètres du navigateur.|الإشعارات محظورة في إعدادات المتصفح.
+Deny only mutes this app. To block the browser itself, use your browser site settings.|Refuser coupe seulement cette appli. Pour bloquer le navigateur, utilisez ses paramètres du site.|الرفض يكتم هذا التطبيق فقط. لحظر المتصفح استخدم إعدادات الموقع فيه.`.split('\n').forEach(l=>{const r=l.split('|');DICT[r[0]]={fr:r[1],ar:r[2]}});
 function trs(x){if(S.lang==='en')return x;const m=x.match(/^(\s*)([\s\S]*?)(\s*)$/),k=m[2],d=DICT[k];if(d&&d[S.lang])return m[1]+d[S.lang]+m[3];
   for(const p of PAT){const r=p[0].exec(k);if(r)return m[1]+p[S.lang==='fr'?1:2].replace(/\$(\d)/g,(_,i)=>r[i])+m[3]}return x}
 const OT=new WeakMap();let _trd=false,_raf=0;
