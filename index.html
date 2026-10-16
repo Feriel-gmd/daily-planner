@@ -467,8 +467,11 @@ function renderBoards(){
   else{const ts=tasks.filter(t=>t.boardId===B.id&&dfOk(t)),n=B.stages.length;
     h+='<div class="cols">'+B.stages.map(s=>{const cs=ts.filter(t=>t.stageId===s.id).sort((x,y)=>x.updatedAt-y.updatedAt);
       return '<div class="col" data-s="'+s.id+'"><div class="r2 hh"><h3>'+esc(s.name)+'</h3><button class="d3" data-a="lm" aria-label="Card options">'+DOTS+'</button></div>'+'<div class="cl">'+cs.map(trow).join('')+'</div><input type="text" class="mini at" placeholder="+ Add task" maxlength="200"></div>'}).join('')+'<div class="col ns"><input type="text" class="mini ac" placeholder="+ Add card" maxlength="30"></div></div>'+(n?'':'<div class="empty">Add your first card, for example To do, Doing or Done.</div>')}
+  const c0=$('#bv .cols'),sl=c0?c0.scrollLeft:0,tp=[...document.querySelectorAll('#bv .cl')].map(x=>x.scrollTop);
   $('#bv').innerHTML=(B?dfChips():'')+h;
-  if(fc){const el=$('#bv '+fc);fc=null;if(el)el.focus()}
+  const c1=$('#bv .cols');if(c1&&sl){c1.style.scrollBehavior='auto';c1.scrollLeft=sl;c1.style.scrollBehavior=''}
+  document.querySelectorAll('#bv .cl').forEach((x,i)=>{if(tp[i])x.scrollTop=tp[i]});
+  if(fc){const el=$('#bv '+fc),pv=fc.indexOf('.col[')===0;fc=null;if(el)el.focus(pv?{preventScroll:true}:undefined)}
 }
 $('#bv').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.cd .m');if(m)openEdit(m.closest('.cd').dataset.id);return}if(b.dataset.df!==undefined){DF=b.dataset.df;render();return}const k=b.dataset.a;
   if(k==='bm')return boardMenu(b,b.dataset.id);
