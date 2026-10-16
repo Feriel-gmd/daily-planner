@@ -289,6 +289,7 @@ option{background:var(--card);color:var(--tx)}
 #mnu2{position:fixed;z-index:71;min-width:170px;max-width:240px;max-height:60vh;overflow:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:6px}
 #mnu2 button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-size:14px;color:var(--tx)}#mnu2 button:hover,#mnu button.hs:hover{background:var(--acb)}
 #mnu button.hs{display:flex;justify-content:space-between;align-items:center;gap:12px}[dir=rtl] #mnu button,[dir=rtl] #mnu2 button{text-align:right}
+.bnm{color:var(--mu);font-size:.85em}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -343,11 +344,12 @@ function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):task
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
   if(col){setSt('saving');col.doc(id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
+const bn=t=>{const b=t.boardId&&boards.find(x=>x.id===t.boardId);return b?' <span class="bnm">('+esc(b.name)+')</span>':''};
 function row(t,od){const tg=[];
   if(od)tg.push('<span class="tg d">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');
   if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+'</span>');
   {const a=dueTag(t),c=clTag(t);if(a)tg.push(a);if(c)tg.push(c)}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
-  return '<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="tg" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(tg.length?'<div class="tags">'+tg.join('')+'</div>':'')+'</div><button class="x" data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button class="x" data-a="rm" aria-label="Delete task">'+TRASH+'</button></div>'}
+  return '<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="tg" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+bn(t)+(tg.length?'<div class="tags">'+tg.join('')+'</div>':'')+'</div><button class="x" data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button class="x" data-a="rm" aria-label="Delete task">'+TRASH+'</button></div>'}
 function render(){
   const td=today(),isT=sel===td;
   $('#ttl').firstChild.textContent=isT?'Today':fmt(sel,{weekday:'long'});
@@ -594,7 +596,7 @@ function renderMo(){
   const ev=evOn(mSel),ts=tasks.filter(t=>t.date===mSel),gs=gls.filter(g=>g.end===mSel);
   $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
   ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+fT(e.time)+'</span>':'')+(e.remind!=null?' <span class="tg">Reminder · '+remLbl(e.remind)+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
-  ts.map(t=>'<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="m">'+esc(t.title)+'</div></div>').join('')+gs.map(g=>'<div class="t"><div class="m">Goal ends: '+esc(g.title)+'</div></div>').join('')+
+  ts.map(t=>'<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="m">'+esc(t.title)+bn(t)+'</div></div>').join('')+gs.map(g=>'<div class="t"><div class="m">Goal ends: '+esc(g.title)+'</div></div>').join('')+
   '<div class="add"><input type="text" id="me" placeholder="Add an event for this day" maxlength="100"><div class="row"><input type="time" id="mt" value="'+(mtV||nowHM())+'" aria-label="Time"><select id="mr" aria-label="Reminder">'+REM.map(r=>'<option value="'+r[0]+'"'+(String(mrV)===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="go" data-a="ae">Add</button></div></div><button class="chip" data-a="od">Open this day</button></div></div>'}
 function addEv(){const v=$('#me').value.trim();if(!v)return;const t=$('#mt').value,r=$('#mr').value;$('#me').value='';mtV=null;mrV='';save({type:'event',id:gid('e'),title:v,date:mSel,time:t||'',remind:r===''?null:+r,created:Date.now()})}
 $('#mv2').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.closest('.t[data-id] .m');if(m)openEdit(m.closest('.t').dataset.id);return}const k=b.dataset.a;
