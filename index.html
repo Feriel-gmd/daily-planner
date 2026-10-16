@@ -344,7 +344,7 @@ function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):task
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
   if(col){setSt('saving');col.doc(id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
-const bn=t=>{const b=t.boardId&&boards.find(x=>x.id===t.boardId);return b?' <span class="bnm">('+esc(b.name)+')</span>':''};
+const bn=t=>{const b=t.boardId&&boards.find(x=>x.id===t.boardId),c=b&&b.stages.find(x=>x.id===t.stageId);return c?' <span class="bnm">('+esc(c.name)+')</span>':''};
 function row(t,od){const tg=[];
   if(od)tg.push('<span class="tg d">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');
   if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+'</span>');
