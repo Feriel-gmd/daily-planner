@@ -347,6 +347,7 @@ const MSG={local:'Not signed in.',ok:'Saved. Your tasks sync to your other devic
 const SY={local:'Not saved',ok:'Synced',saving:'Saving…',err:'Error'};const setSt=k=>{$('#st').textContent=MSG[k];const y=$('#sy');if(y)y.lastChild.textContent=' '+SY[k]};
 const prio=t=>(t.important?2:0)+(t.urgent?1:0);
 const sortT=(a,b)=>prio(b)-prio(a)||(a.time||'99').localeCompare(b.time||'99')||a.title.localeCompare(b.title);
+function rollover(){if(!loaded)return;const td=today();tasks.filter(t=>!t.done&&t.date&&t.date<td).forEach(t=>write({...t,date:td,updatedAt:Date.now()}))}
 function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):tasks[i]=t;render();
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
@@ -421,7 +422,7 @@ function setMode(m){amode=m;const T={in:['Welcome back','Log in to see your day'
 function start(session){
   showAuth(false);window.EMAIL=session.user.email;window.METAN=(session.user.user_metadata||{}).name||'';
   col=makeCol(sb,session.user.id);setSt('saving');
-  col.onSnapshot(s=>{const all=s.docs.map(d=>d.data());tasks=all.filter(x=>x&&x.type==='task');boards=all.filter(x=>x&&x.type==='board');chs=all.filter(x=>x&&x.type==='challenge');rts=all.filter(x=>x&&x.type==='routine');gls=all.filter(x=>x&&x.type==='goal');evs=all.filter(x=>x&&x.type==='event');prs=all.filter(x=>x&&x.type==='pref');loaded=true;render();setSt(s.metadata.hasPendingWrites?'saving':'ok')},()=>setSt('err'));
+  col.onSnapshot(s=>{const all=s.docs.map(d=>d.data());tasks=all.filter(x=>x&&x.type==='task');boards=all.filter(x=>x&&x.type==='board');chs=all.filter(x=>x&&x.type==='challenge');rts=all.filter(x=>x&&x.type==='routine');gls=all.filter(x=>x&&x.type==='goal');evs=all.filter(x=>x&&x.type==='event');prs=all.filter(x=>x&&x.type==='pref');loaded=true;rollover();render();setSt(s.metadata.hasPendingWrites?'saving':'ok')},()=>setSt('err'));
   window.addEventListener('online',()=>col.sync().then(()=>setSt('ok')).catch(()=>setSt('err')));
   setInterval(()=>{if(navigator.onLine)col.sync().then(()=>setSt('ok')).catch(()=>setSt('err'))},60000)}
 async function submit(){
@@ -802,7 +803,7 @@ function checkRem(){if(S.notif===false)return;const now=nowD().getTime(),f=fired
     f[key]=now;ch=true;const body=(e.time?fT(e.time)+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
     toast(e.title+' · '+body);notify(e.title,body,key)});
   if(ch){const ks=Object.keys(f);if(ks.length>300)ks.slice(0,ks.length-300).forEach(k=>delete f[k]);try{localStorage.setItem('dpFired',JSON.stringify(f))}catch(e){}}}
-setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
+setInterval(rollover,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollover()});setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
 
 /* ---------- Settings: language, time format, time region, week start, notifications ---------- */
 const TZS=['','Africa/Algiers','Africa/Cairo','Africa/Casablanca','Africa/Tunis','Africa/Lagos','Africa/Johannesburg','Europe/London','Europe/Paris','Europe/Berlin','Europe/Istanbul','Asia/Riyadh','Asia/Dubai','Asia/Kolkata','Asia/Shanghai','Asia/Tokyo','Australia/Sydney','America/New_York','America/Chicago','America/Los_Angeles','America/Sao_Paulo'];
