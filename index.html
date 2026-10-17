@@ -299,6 +299,7 @@ option{background:var(--card);color:var(--tx)}
 }
 .dd{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.dd i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.dd i.o,.lgd i.o{background:var(--dg)}.dd i.t,.lgd i.t{background:#f5a524}.dd small{font-size:10px;color:var(--mu)}
 .lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:2px 0 4px}.lgd span{display:flex;align-items:center;gap:5px}
+.mq small{display:block;color:var(--mu);font-size:11px}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -314,7 +315,7 @@ option{background:var(--card);color:var(--tx)}
 <div class="row">
 <button class="chip" id="imp">Important</button><button class="chip u" id="urg">Urgent</button>
 <input type="time" id="tm" aria-label="Time"><input type="date" id="dd" aria-label="Deadline" title="Deadline"><button class="go" id="go">Add</button></div></div>
-<div id="sch"></div><div id="chT"></div><div id="seg" class="seg"></div><div id="dff"></div><div id="list"></div><aside id="side"></aside></div>
+<div id="chT"></div><div id="seg" class="seg"></div><div id="dff"></div><div id="list"></div><aside id="side"></aside></div>
 <div id="vBoards" hidden><div id="bv"></div></div>
 <div id="vCh" hidden><div id="cv"><div id="cf"></div><div id="cl"></div></div></div>
 <div id="vWk" hidden><div id="wl"></div><div id="wf"></div></div>
@@ -458,7 +459,7 @@ $('#fg').onclick=async()=>{const email=$('#ae').value.trim();if(!email){amsg('Ty
 
 let boards=[],chs=[],selB=null,addingB=false,fc=null,armed=null;
 const gid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
+const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
 function save(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o;render();
   if(col){setSt('saving');col.doc(o.id).set(o).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function drop(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);if(i>=0)a.splice(i,1);
@@ -551,9 +552,6 @@ let rts=[],gls=[],evs=[],prs=[],wform='',mY=new Date().getFullYear(),mM=new Date
 const arr=t=>({board:boards,challenge:chs,routine:rts,goal:gls,event:evs,pref:prs}[t]);
 
 const hs=x=>[...x].reduce((a,c)=>(a*31+c.charCodeAt(0))%5,0);
-const dayR=wd=>rts.filter(r=>r.days.includes(wd)).sort((a,b)=>a.start.localeCompare(b.start));
-const sess=(r,del)=>'<div class="se '+(r.kind==='personal'?'kg':'kb')+'"><b>'+esc(r.subject)+'</b><div>'+fT(r.start)+'–'+fT(r.end)+'</div><div>'+esc([r.room,r.teacher].filter(Boolean).join(' · '))+'</div>'+(del?'<button class="x" data-a="dr" data-id="'+r.id+'" aria-label="Delete routine">'+TRASH+'</button>':'')+'</div>';
-function renderSch(){const r=dayR(new Date(sel+'T12:00').getDay());$('#sch').innerHTML=r.length?'<h2>Schedule</h2>'+r.map(x=>sess(x,0)).join(''):''}
 const left=g=>Math.round((new Date(g.end+'T12:00')-new Date(today()+'T12:00'))/864e5);
 const hm=x=>{if(S.tf==='12')return fT(x);const q=x.split(':');return +q[0]+(q[1]==='00'?'':':'+q[1])};
 let wopen=null;
@@ -563,35 +561,19 @@ function renderWk(){const t0=nowD(),a=new Date(t0.getFullYear(),t0.getMonth(),t0
   const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5);
   const goals=gls.slice().sort((x,y)=>x.end.localeCompare(y.end)).map(x=>{const n=D(x.start,x.end)+1,lt=tasks.filter(t=>t.goalId===x.id),ld=lt.filter(t=>t.done).length,pc=x.done?100:lt.length?Math.round(ld/lt.length*100):Math.max(0,Math.min(100,Math.round((D(x.start,td)+1)/n*100))),l=left(x);
     return '<div class="chc" data-gid="'+x.id+'"><div class="r2"><b class="m'+(x.done?' dn':'')+'">'+esc(x.title)+'</b><span class="tg">'+n+(n===1?' day':' days')+'</span>'+(lt.length?'<span class="tg">'+ld+'/'+lt.length+' tasks</span>':'')+'</div><div class="bar"><i style="width:'+pc+'%"></i></div><div class="cnt" style="margin:0">'+(x.done?'Done':l<0?'Ended '+(-l)+(l===-1?' day':' days')+' ago':l+(l===1?' day':' days')+' left')+' · <button class="lk2" data-a="gd">'+(x.done?'Undo':'Mark done')+'</button> · <button class="lk2" data-a="dg">'+'Delete'+'</button></div></div>'}).join('');
-  const rows=ORD().map(d=>{const r=dayR(d);if(!r.length)return '';const op=r.find(x=>x.id===wopen);
-    return '<div class="wr"><div class="wrl"><b'+(d===t0.getDay()?' class="tdyl"':'')+'>'+DN[d]+'</b><div class="chs">'+r.map(x=>'<button class="rc '+(x.kind==='personal'?'kg':'kb')+'" data-a="ro" data-id="'+x.id+'">'+esc(x.subject)+' '+hm(x.start)+'-'+hm(x.end)+'</button>').join('')+'</div></div>'+
-    (op?'<div class="rd">'+esc([op.subject,fT(op.start)+'–'+fT(op.end),op.room,op.teacher].filter(Boolean).join(' · '))+' · <button class="lk2" data-a="dr" data-id="'+op.id+'">'+'Delete'+'</button></div>':'')+'</div>'}).join('');
   window.wkR=rng;$('#wl').innerHTML=
   
-  '<div class="wc2"><div><h2>Goals</h2>'+(goals||'<div class="cnt">No goals yet.</div>')+'</div><div><h2>Weekly routine</h2>'+(rows||'<div class="cnt">No routines yet. Add classes, work hours or the gym.</div>')+'</div></div>'}
-function wformR(){const D7=ORD().map(i=>'<button class="chip dy" data-d="'+i+'">'+DN[i]+'</button>').join('');
-  const seg=m=>'<div class="row"><button class="chip'+(m==='s'?' on':'')+'" data-a="ns">Routine</button><button class="chip'+(m==='g'?' on':'')+'" data-a="ng">Goal</button></div>';
-  $('#wf').innerHTML=wform==='s'?'<div class="add">'+seg('s')+'<input type="text" id="ws" placeholder="Subject, e.g. ML2 or Gym" maxlength="60"><div class="row"><button class="chip kd on" data-k="study">School or work</button><button class="chip kd" data-k="personal">Personal</button></div><div class="row">'+D7+'</div><div class="row"><label>From <input type="time" id="wst" value="'+nowHM()+'"></label><label>To <input type="time" id="wen" value="'+nowHM(1)+'"></label></div><div class="row"><input class="sm" type="text" id="wr" placeholder="Room" maxlength="20"><input class="sm" type="text" id="wtc" placeholder="Teacher" maxlength="40"></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="sc">Save routine</button></div></div>':
-  wform==='g'?'<div class="add">'+seg('g')+'<input type="text" id="gt" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>From <input type="date" id="gs" value="'+today()+'"></label><label>To <input type="date" id="ge"></label></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="gc">Save goal</button></div></div>':
-  '<button class="addb" data-a="ns">+ Add routine or goal</button>';
-  const f=$(wform==='s'?'#ws':wform==='g'?'#gt':'#nothing');if(f)f.focus()}
-function mkSess(){const subject=$('#ws').value.trim(),days=[...document.querySelectorAll('.dy.on')].map(b=>+b.dataset.d),start=$('#wst').value,end=$('#wen').value;
-  const err=!subject?'Enter a subject.':!days.length?'Pick at least one day.':!start||!end?'Set start and end times.':end<=start?'End must be after start.':'';
-  if(err){$('#we').textContent=err;return}
-  const kd=document.querySelector('.kd.on');save({type:'routine',id:gid('r'),kind:kd&&kd.dataset.k==='personal'?'personal':'study',subject,room:$('#wr').value.trim(),teacher:$('#wtc').value.trim(),days,start,end,created:Date.now()});wform='';wformR()}
+  '<div><h2>Goals</h2>'+(goals||'<div class="cnt">No goals yet.</div>')+'</div>'}
+function wformR(){$('#wf').innerHTML=wform==='g'?'<div class="add"><input type="text" id="gt" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>From <input type="date" id="gs" value="'+today()+'"></label><label>To <input type="date" id="ge"></label></div><div class="err" id="we"></div><div class="row"><button class="chip" data-a="wx">Cancel</button><button class="go" data-a="gc">Save goal</button></div></div>':'<button class="addb" data-a="ng">+ Add goal</button>';
+  const f=$('#gt');if(f)f.focus()}
 function mkGoal(){const title=$('#gt').value.trim(),start=$('#gs').value,end=$('#ge').value;
   const err=!title?'Enter a goal.':!start||!end?'Pick both dates.':end<start?'The end date is before the start.':'';
   if(err){$('#we').textContent=err;return}
   save({type:'goal',id:gid('g'),title,start,end,done:false,created:Date.now()});wform='';wformR()}
 $('#wf').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.a;
-  if(k==='ns'){wform='s';wformR()}else if(k==='ng'){wform='g';wformR()}else if(k==='wx'){wform='';wformR()}
-  else if(b.classList.contains('dy'))b.classList.toggle('on');
-  else if(b.classList.contains('kd')){document.querySelectorAll('.kd').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
-  
-  else if(k==='sc')mkSess();else if(k==='gc')mkGoal()};
+  if(k==='ng'){wform='g';wformR()}else if(k==='wx'){wform='';wformR()}else if(k==='gc')mkGoal()};
 $('#wl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.a;
   if(b.dataset.w){wday=+b.dataset.w;renderWk();return}
-  if(k==='ro'){wopen=wopen===b.dataset.id?null:b.dataset.id;renderWk();return}if(k==='dr'){const r=rts.find(x=>x.id===b.dataset.id);if(r)ask('Delete this routine?',r.subject+' will be removed from every day.',()=>drop(r));return}
   const t=b.closest('[data-gid]');if(!t)return;const g=gls.find(x=>x.id===t.dataset.gid);if(!g)return;
   if(k==='gd')save({...g,done:!g.done});else if(k==='dg')ask('Delete this goal?',g.title,()=>drop(g))};
 
@@ -675,7 +657,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#dlg').hidde
   window.addEventListener('pointerup',()=>{if(d){d.el.classList.remove('drag');d=null}})})();
 /* ---------- Header, search, quick add ---------- */
 let curV='today';
-const QA={today:'+ New task',boards:'+ New card',ch:'+ New challenge',wk:'+ Add routine',mo:'+ New event',pf:''};
+const QA={today:'+ New task',boards:'+ New card',ch:'+ New challenge',wk:'+ Add goal',mo:'+ New event',pf:''};
 function setHd(){
   const ti={today:sel===today()?'Today':fmt(sel,{weekday:'long'}),boards:'Boards',ch:'Challenges',wk:'Week',mo:'Month',pf:'Profile'}[curV];
   const c=$('#cnt').textContent,sub={today:fmt(sel,{weekday:'long',day:'numeric',month:'long'})+(c?' · '+c:''),boards:'',ch:'',wk:window.wkR||'',mo:new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'}),pf:''}[curV];
@@ -684,7 +666,7 @@ $('#qa').onclick=()=>{const k=curV;
   if(k==='today')$('#in').focus();
   else if(k==='boards'){const i=$('#bv .ac')||$('#nb');if(i)i.focus()}
   else if(k==='ch')cform(true);
-  else if(k==='wk'){wform='s';wformR()}
+  else if(k==='wk'){wform='g';wformR()}
   else if(k==='mo'){const i=$('#me');if(i)i.focus()}};
 $('#q').oninput=()=>{const v=$('#q').value.trim().toLowerCase(),r=v?tasks.filter(t=>t.title.toLowerCase().includes(v)).slice(0,8):[];
   $('#qr').innerHTML=r.map(t=>'<button data-id="'+t.id+'">'+esc(t.title)+'<small>'+(t.date?fmt(t.date,{day:'numeric',month:'short'}):'Board')+'</small></button>').join('')||(v?'<div class="cnt" style="padding:10px;margin:0">No matches</div>':'');$('#qr').hidden=!v};
@@ -713,7 +695,7 @@ function renderPf(){if(prs[0]&&prs[0].theme&&prs[0].theme!==theme)applyTheme(prs
   $('#pv').innerHTML='<button class="chip pbk" data-a="pb">‹ Back</button><div class="pg"><div class="pc1 pid"><span class="bigav">'+esc(ini(pn()))+'</span><div class="m">'+(pfEd?'<input type="text" id="pn" value="'+esc(pn())+'" placeholder="Your name" maxlength="40">':'<b class="pnm">'+esc(pn()||'Your name')+'</b>')+'<div class="cnt" style="margin:2px 0 0">'+(window.EMAIL?esc(window.EMAIL):'Not signed in')+'</div></div><button class="chip" data-a="pe">'+(pfEd?'Save':PENCIL+' Edit profile')+'</button></div>'+
   '<div class="pst">'+stat('tasks','Tasks',tasks.length)+stat('boards','Boards',boards.length)+stat('cup','Challenges',chs.length)+stat('cal','This week',nw||'–')+'</div>'+
   '<div class="pcols"><div class="pc1">'+hd('pal','Appearance')+srow('pal','Theme',['auto','light','dark'].map(x=>'<button class="chip'+(theme===x?' on':'')+'" data-th="'+x+'">'+x[0].toUpperCase()+x.slice(1)+'</button>').join(''))+'</div><div class="pc1">'+hd('gear','Settings')+settingsHtml()+'</div></div>'+
-  '<div class="pc1 prow"><span class="pic">'+IC(P.db)+'</span><div class="m"><b>Your data</b><small>'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+rts.length+' routines · '+gls.length+' goals · '+evs.length+' events</small></div></div>'+
+  '<div class="pc1 prow"><span class="pic">'+IC(P.db)+'</span><div class="m"><b>Your data</b><small>'+tasks.length+' tasks · '+boards.length+' boards · '+chs.length+' challenges · '+gls.length+' goals · '+evs.length+' events</small></div></div>'+
   '<div class="pc1 prow"><span class="pic">'+IC(P.user)+'</span><div class="m"><b>Account</b><small>'+esc($('#st').textContent)+'</small></div><button class="chip" data-a="lo">'+IC(P.out)+' Log out</button></div></div>'}
 $('#pv').onclick=e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.a==='pb'){show(lastV);return}
@@ -730,9 +712,8 @@ function renderSide(){
   const td=today(),isT=sel===td;
   const open=tasks.filter(t=>!t.done&&(t.date===sel||(isT&&t.date&&t.date<td)));
   const q=(i,u)=>open.filter(t=>!!t.important===i&&!!t.urgent===u).map(t=>'<div class="mq">'+esc(t.title)+'</div>').join('')||'<div class="mq mu">None</div>';
-  const n=nowD(),h2=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2),nx=isT?dayR(n.getDay()).find(r=>r.end>h2):null;
-  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Next class</h2>'+(nx?'<div class="se '+(nx.kind==='personal'?'kg':'kb')+'"><b>'+esc(nx.subject)+'</b><div>'+fT(nx.start)+'–'+fT(nx.end)+'</div><div>'+esc([nx.room].filter(Boolean).join(' · '))+'</div></div>':'<div class="cnt" style="margin:0">Nothing else scheduled today.</div>')+
-  '<h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'}
+  const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5),ag=gls.filter(g=>!g.done&&g.start<=sel&&sel<=g.end).map(g=>{const lt=tasks.filter(t=>t.goalId===g.id),ld=lt.filter(t=>t.done).length;return '<div class="mq">⚑ '+esc(g.title)+'<small>'+(lt.length?ld+'/'+lt.length+' tasks':'Day '+(D(g.start,sel)+1)+' of '+(D(g.start,g.end)+1))+'</small></div>'}).join('');
+  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'+(ag?'<h2>Goals</h2>'+ag:'')}
 /* ---------- 3-dot menus, rename dialog, reminders, current-time defaults ---------- */
 const DOTS='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
 const pad2=n=>String(n).padStart(2,'0');
@@ -960,6 +941,6 @@ function tr(){if(S.lang!=='en')_trd=true;if(!_trd)return;
   while(n=w.nextNode()){const r=OT.get(n),src=r&&n.data===r.t?r.o:n.data,out=trs(src);if(out!==n.data)n.data=out;OT.set(n,{o:src,t:out})}
   document.querySelectorAll('[placeholder],[aria-label]').forEach(el=>['placeholder','aria-label'].forEach(a=>{const v=el.getAttribute(a);if(v==null)return;const k='_o'+a,rr=el[k],src=rr&&v===rr.t?rr.o:v,out=trs(src);if(out!==v)el.setAttribute(a,out);el[k]={o:src,t:out}}))}
 new MutationObserver(()=>{cancelAnimationFrame(_raf);_raf=requestAnimationFrame(tr)}).observe(document.body,{childList:true,subtree:true,characterData:true});
-applyS();cform(false);renderBoards();renderCh();wformR();renderSch();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
+applyS();cform(false);renderBoards();renderCh();wformR();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
 try{const t=localStorage.getItem('dpTheme');if(t)applyTheme(t)}catch(e){}applyTheme(theme);document.body.dataset.v='today';
 </script></body></html>
