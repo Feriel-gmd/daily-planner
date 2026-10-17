@@ -297,6 +297,8 @@ option{background:var(--card);color:var(--tx)}
 .pch{font-size:16px}.sr{grid-template-columns:22px 1fr;row-gap:8px;padding:12px 0}.sr .row{grid-column:1/-1}.sr select{width:100%}
 .prow{flex-wrap:wrap}.prow small{overflow-wrap:anywhere}.prow>.chip{margin-left:auto}
 }
+.dd{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.dd i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.dd i.o,.lgd i.o{background:var(--dg)}.dd i.t,.lgd i.t{background:#f5a524}.dd small{font-size:10px;color:var(--mu)}
+.lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:2px 0 4px}.lgd span{display:flex;align-items:center;gap:5px}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -321,7 +323,7 @@ option{background:var(--card);color:var(--tx)}
 <div class="st" id="st"></div></div>
 <nav class="nav"><div class="logo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>Planner</div><button class="on" data-v="today"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span>Today</span></button><button data-v="boards"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>Boards</span></button><button data-v="ch"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.500 0 2 1 3 2 3 0-3-1-6 1-8.500z"/></svg><span>Challenges</span></button><button data-v="wk"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h3"/></svg><span>Week</span></button><button data-v="mo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg><span>Month</span></button><div class="sp"></div><div class="sy" id="sy"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A5.500 5.500 0 0 1 17 9a3.500 3.500 0 0 1 .5 9z"/><path d="M9.500 13.500l2 2 3.500-3.500"/></svg> Not saved</div><button class="me" data-v="pf"><span class="avs" id="av2">?</span><span id="mn">Profile</span></button></nav><button id="fab" aria-label="Add">+</button>
 <div id="dlg" hidden><div class="dbx" role="alertdialog" aria-modal="true"><b id="dt"></b><p id="dm"></p><div class="dr"><button id="dc">Cancel</button><button id="dk">Delete</button></div></div></div>
-<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div><div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter"><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
+<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div><div class="row" id="egr"><label>Goal <select id="egl"></select></label></div><div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter"><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
 <div id="rnd" hidden><div class="dbx ebx" role="dialog" aria-modal="true"><b id="rnt">Rename</b><input type="text" id="rni" maxlength="60"><div class="dr"><button id="rnc">Cancel</button><button id="rnk">Save</button></div></div></div>
 <div id="toast" hidden role="status"></div>
 <script>
@@ -352,11 +354,12 @@ function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):task
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
   if(col){setSt('saving');col.doc(id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
+const gTag=t=>{const g=t.goalId&&gls.find(x=>x.id===t.goalId);return g?'<span class="tg n">⚑ '+esc(g.title)+'</span>':''};
 const bn=t=>{const b=t.boardId&&boards.find(x=>x.id===t.boardId),c=b&&b.stages.find(x=>x.id===t.stageId);return c?' <span class="bnm">('+esc(c.name)+')</span>':''};
 function row(t,od){const tg=[];
   if(od)tg.push('<span class="tg d">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');
   if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+'</span>');
-  {const a=dueTag(t),c=clTag(t);if(a)tg.push(a);if(c)tg.push(c)}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
+  {const a=dueTag(t),c=clTag(t),g=gTag(t);if(a)tg.push(a);if(c)tg.push(c);if(g)tg.push(g)}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
   return '<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="tg" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+bn(t)+(tg.length?'<div class="tags">'+tg.join('')+'</div>':'')+'</div><button class="x" data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button class="x" data-a="rm" aria-label="Delete task">'+TRASH+'</button></div>'}
 function render(){
   const td=today(),isT=sel===td;
@@ -466,7 +469,7 @@ function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle
 document.querySelector('.nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
 
 /* ---------- Boards: board > cards > tasks ---------- */
-const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(()=>{const x=[];if(t.date)x.push('<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');[dueTag(t),clTag(t)].forEach(v=>{if(v)x.push(v)});return (x.length?'<div class="tags">'+x.join('')+'</div>':'')+(t.cl&&t.cl.length?'<div class="bar ckb"><i style="width:'+Math.round(t.cl.filter(v=>v.done).length/t.cl.length*100)+'%"></i></div>':'')})()+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
+const trow=t=>'<div class="cd'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="dn" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+(()=>{const x=[];if(t.date)x.push('<span class="tg">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');[dueTag(t),clTag(t),gTag(t)].forEach(v=>{if(v)x.push(v)});return (x.length?'<div class="tags">'+x.join('')+'</div>':'')+(t.cl&&t.cl.length?'<div class="bar ckb"><i style="width:'+Math.round(t.cl.filter(v=>v.done).length/t.cl.length*100)+'%"></i></div>':'')})()+'</div><button class="d3" data-a="km" aria-label="Task options">'+DOTS+'</button></div>';
 function renderBoards(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#bv input')&&a.value)return;
   const bd=boards.slice().sort((x,y)=>x.created-y.created);
@@ -558,8 +561,8 @@ function renderWk(){const t0=nowD(),a=new Date(t0.getFullYear(),t0.getMonth(),t0
   const mo=(d,o)=>d.toLocaleDateString(LC(),{month:o});
   const rng=a.getMonth()===b.getMonth()?a.getDate()+' to '+b.getDate()+' '+mo(b,'long'):a.getDate()+' '+mo(a,'short')+' to '+b.getDate()+' '+mo(b,'short');
   const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5);
-  const goals=gls.slice().sort((x,y)=>x.end.localeCompare(y.end)).map(x=>{const n=D(x.start,x.end)+1,pc=x.done?100:Math.max(0,Math.min(100,Math.round((D(x.start,td)+1)/n*100))),l=left(x);
-    return '<div class="chc" data-gid="'+x.id+'"><div class="r2"><b class="m'+(x.done?' dn':'')+'">'+esc(x.title)+'</b><span class="tg">'+n+(n===1?' day':' days')+'</span></div><div class="bar"><i style="width:'+pc+'%"></i></div><div class="cnt" style="margin:0">'+(x.done?'Done':l<0?'Ended '+(-l)+(l===-1?' day':' days')+' ago':l+(l===1?' day':' days')+' left')+' · <button class="lk2" data-a="gd">'+(x.done?'Undo':'Mark done')+'</button> · <button class="lk2" data-a="dg">'+'Delete'+'</button></div></div>'}).join('');
+  const goals=gls.slice().sort((x,y)=>x.end.localeCompare(y.end)).map(x=>{const n=D(x.start,x.end)+1,lt=tasks.filter(t=>t.goalId===x.id),ld=lt.filter(t=>t.done).length,pc=x.done?100:lt.length?Math.round(ld/lt.length*100):Math.max(0,Math.min(100,Math.round((D(x.start,td)+1)/n*100))),l=left(x);
+    return '<div class="chc" data-gid="'+x.id+'"><div class="r2"><b class="m'+(x.done?' dn':'')+'">'+esc(x.title)+'</b><span class="tg">'+n+(n===1?' day':' days')+'</span>'+(lt.length?'<span class="tg">'+ld+'/'+lt.length+' tasks</span>':'')+'</div><div class="bar"><i style="width:'+pc+'%"></i></div><div class="cnt" style="margin:0">'+(x.done?'Done':l<0?'Ended '+(-l)+(l===-1?' day':' days')+' ago':l+(l===1?' day':' days')+' left')+' · <button class="lk2" data-a="gd">'+(x.done?'Undo':'Mark done')+'</button> · <button class="lk2" data-a="dg">'+'Delete'+'</button></div></div>'}).join('');
   const rows=ORD().map(d=>{const r=dayR(d);if(!r.length)return '';const op=r.find(x=>x.id===wopen);
     return '<div class="wr"><div class="wrl"><b'+(d===t0.getDay()?' class="tdyl"':'')+'>'+DN[d]+'</b><div class="chs">'+r.map(x=>'<button class="rc '+(x.kind==='personal'?'kg':'kb')+'" data-a="ro" data-id="'+x.id+'">'+esc(x.subject)+' '+hm(x.start)+'-'+hm(x.end)+'</button>').join('')+'</div></div>'+
     (op?'<div class="rd">'+esc([op.subject,fT(op.start)+'–'+fT(op.end),op.room,op.teacher].filter(Boolean).join(' · '))+' · <button class="lk2" data-a="dr" data-id="'+op.id+'">'+'Delete'+'</button></div>':'')+'</div>'}).join('');
@@ -598,11 +601,11 @@ function renderMo(){
   const a=document.activeElement;if(a&&a.matches&&a.matches('#mv2 input')&&a.value)return;
   const dim=new Date(mY,mM+1,0).getDate(),off=wOff(new Date(mY,mM,1)),td=today();
   let c=ORD().map(i=>'<b>'+DN[i]+'</b>').join('');for(let i=0;i<off;i++)c+='<div class="mc o"></div>';
-  for(let d=1;d<=dim;d++){const ds=mY+'-'+String(mM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),ev=evOn(ds),nt=tasks.filter(t=>t.date===ds&&!t.done).length,ng=gls.filter(g=>g.end===ds&&!g.done).length;
-    c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+ev.slice(0,2).map(e=>'<i class="ev">'+esc(e.title)+'</i>').join('')+(ev.length>2?'<i class="ev">+'+(ev.length-2)+'</i>':'')+(nt||ng?'<em>'+(nt?nt+(nt>1?' tasks':' task'):'')+(ng?' ⚑':'')+'</em>':'')+'</button>'}
+  for(let d=1;d<=dim;d++){const ds=mY+'-'+String(mM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),ev=evOn(ds),nt=tasks.filter(t=>t.date===ds&&!t.done).length,ng=gls.filter(g=>g.end===ds&&!g.done).length,dl=tasks.filter(t=>t.due===ds&&!t.done).length;
+    c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+(dl?'<span class="dd" title="Deadline">'+Array(Math.min(dl,4)).fill('<i class="'+(ds<td?'o':ds===td?'t':'')+'"></i>').join('')+(dl>4?'<small>+'+(dl-4)+'</small>':'')+'</span>':'')+ev.slice(0,2).map(e=>'<i class="ev">'+esc(e.title)+'</i>').join('')+(ev.length>2?'<i class="ev">+'+(ev.length-2)+'</i>':'')+(nt||ng?'<em>'+(nt?nt+(nt>1?' tasks':' task'):'')+(ng?' ⚑':'')+'</em>':'')+'</button>'}
   const pre=mY+'-'+String(mM+1).padStart(2,'0')+'-',mlist=evs.filter(e=>e.date.startsWith(pre)).sort((a,b)=>a.date.localeCompare(b.date)).map(e=>'<div class="t"><div class="m"><b>'+fmt(e.date,{day:'numeric',month:'short'})+'</b> · '+esc(e.title)+'</div></div>').join('')||'<div class="cnt" style="margin:0">No events this month.</div>';
-  const ev=evOn(mSel),ts=tasks.filter(t=>t.date===mSel),gs=gls.filter(g=>g.end===mSel);
-  $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
+  const ev=evOn(mSel),ts=tasks.filter(t=>t.date===mSel||(t.due===mSel&&!t.done)),gs=gls.filter(g=>g.end===mSel);
+  $('#mv2').innerHTML='<div class="r2 hh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><b>'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</b><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="lgd"><span><i class="o"></i>Overdue</span><span><i class="t"></i>Due today</span><span><i></i>Upcoming</span></div><div class="mo2"><div class="mg">'+c+'</div><div class="md"><h2>This month</h2>'+mlist+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+
   ev.map(e=>'<div class="t"><div class="m"><b>'+esc(e.title)+'</b>'+(e.time?' <span class="tg n">'+fT(e.time)+'</span>':'')+(e.remind!=null?' <span class="tg">Reminder · '+remLbl(e.remind)+'</span>':'')+'</div><button class="x" data-a="de" data-id="'+e.id+'" aria-label="Delete event">'+TRASH+'</button></div>').join('')+
   ts.map(t=>'<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><div class="m">'+esc(t.title)+bn(t)+'</div></div>').join('')+gs.map(g=>'<div class="t"><div class="m">Goal ends: '+esc(g.title)+'</div></div>').join('')+
   '<div class="add"><input type="text" id="me" placeholder="Add an event for this day" maxlength="100"><div class="row"><input type="time" id="mt" value="'+(mtV||nowHM())+'" aria-label="Time"><select id="mr" aria-label="Reminder">'+REM.map(r=>'<option value="'+r[0]+'"'+(String(mrV)===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select><button class="go" data-a="ae">Add</button></div></div><button class="chip" data-a="od">Open this day</button></div></div>'}
@@ -655,13 +658,13 @@ function dclose(){$('#dlg').hidden=true;dfn=null}
 $('#dc').onclick=dclose;$('#dlg').onclick=e=>{if(e.target.id==='dlg')dclose()};
 $('#dk').onclick=()=>{const f=dfn;dclose();if(f)f()};
 function openEdit(id){const t=tasks.find(x=>x.id===id);if(!t)return;etask=t;
-  ecl=(t.cl||[]).map(x=>({...x}));$('#edd').value=t.due||'';renderEcl();updEds();$('#eci').value='';$('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
+  ecl=(t.cl||[]).map(x=>({...x}));$('#edd').value=t.due||'';$('#egr').hidden=!gls.length;$('#egl').innerHTML='<option value="">No goal</option>'+gls.filter(g=>!g.done||g.id===t.goalId).map(g=>'<option value="'+g.id+'"'+(t.goalId===g.id?' selected':'')+'>'+esc(g.title)+'</option>').join('');renderEcl();updEds();$('#eci').value='';$('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
   $('#ei').classList.toggle('on',!!t.important);$('#eu').classList.toggle('on',!!t.urgent);$('#edl').hidden=false;$('#et').focus()}
 function closeEdit(){$('#edl').hidden=true;etask=null}
 $('#ei').onclick=e=>e.currentTarget.classList.toggle('on');$('#eu').onclick=e=>e.currentTarget.classList.toggle('on');
 $('#ec').onclick=closeEdit;$('#edl').onclick=e=>{if(e.target.id==='edl')closeEdit()};
 function saveEdit(){const v=$('#et').value.trim();if(!v||!etask){$('#et').focus();return}
-  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),due:$('#edd').value||'',cl:addCk(),updatedAt:Date.now()});closeEdit()}
+  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),due:$('#edd').value||'',goalId:$('#egl').value||'',cl:addCk(),updatedAt:Date.now()});closeEdit()}
 $('#es').onclick=saveEdit;
 $('#edl').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='et')saveEdit()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#dlg').hidden)dclose();if(!$('#edl').hidden)closeEdit()}});
@@ -818,7 +821,7 @@ function settingsHtml(){let dz='';try{dz=Intl.DateTimeFormat().resolvedOptions()
   srow('pin','Time region','<select id="stz">'+TZS.map(z=>op(z,z?z.replace(/_/g,' '):'Device default ('+dz+')',S.tz===z)).join('')+'</select>')+
   srow('cal','Week starts on',ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday'))+
   srow('bell','Notifications',ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny'))+'<div class="cnt nth">Deny only mutes this app. To block the browser itself, use your browser site settings.</div>'}
-const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
+const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^(\d+)\/(\d+) tasks$/,'$1/$2 tâches','$1/$2 مهام'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
 `Today|Aujourd'hui|اليوم
 Boards|Tableaux|اللوحات
 Challenges|Défis|التحديات
@@ -903,6 +906,9 @@ Edit profile|Modifier le profil|تعديل الملف
 Tasks|Tâches|المهام
 This week|Cette semaine|هذا الأسبوع
 Theme|Thème|السمة
+Upcoming|À venir|قادمة
+No goal|Aucun objectif|بلا هدف
+Deadline|Échéance|الموعد النهائي
 Welcome back|Bon retour|مرحبًا بعودتك
 Log in to see your day|Connectez-vous pour voir votre journée|سجّل الدخول لرؤية يومك
 Log in|Se connecter|تسجيل الدخول
