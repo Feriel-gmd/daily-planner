@@ -300,6 +300,9 @@ option{background:var(--card);color:var(--tx)}
 .dd{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.dd i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.dd i.o,.lgd i.o{background:var(--dg)}.dd i.t,.lgd i.t{background:#f5a524}.dd small{font-size:10px;color:var(--mu)}
 .lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:2px 0 4px}.lgd span{display:flex;align-items:center;gap:5px}
 .mq small{display:block;color:var(--mu);font-size:11px}
+.tri{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--ac);border-radius:14px;padding:12px;margin:10px 0}.trr{padding:8px 0;border-top:1px solid var(--bd)}.trr .row{margin:6px 0 0}.trr .chip{height:32px;font-size:13px}.trr input[type=date]{border:0;background:transparent;color:inherit;font:inherit;width:118px}
+.wkg{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.wd{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;font:inherit}.wd small{color:var(--mu);font-size:11px}.wd span{font-size:11px;color:var(--mu)}.wd.tdy{border-color:var(--ac)}.wd.on{background:var(--acb)}
+#brief{margin-top:6px}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -315,7 +318,7 @@ option{background:var(--card);color:var(--tx)}
 <div class="row">
 <button class="chip" id="imp">Important</button><button class="chip u" id="urg">Urgent</button>
 <input type="time" id="tm" aria-label="Time"><input type="date" id="dd" aria-label="Deadline" title="Deadline"><button class="go" id="go">Add</button></div></div>
-<div id="chT"></div><div id="seg" class="seg"></div><div id="dff"></div><div id="list"></div><aside id="side"></aside></div>
+<div id="tri"></div><div id="chT"></div><div id="seg" class="seg"></div><div id="dff"></div><div id="list"></div><div id="brief"></div><aside id="side"></aside></div>
 <div id="vBoards" hidden><div id="bv"></div></div>
 <div id="vCh" hidden><div id="cv"><div id="cf"></div><div id="cl"></div></div></div>
 <div id="vWk" hidden><div id="wl"></div><div id="wf"></div></div>
@@ -350,7 +353,6 @@ const MSG={local:'Not signed in.',ok:'Saved. Your tasks sync to your other devic
 const SY={local:'Not saved',ok:'Synced',saving:'Saving…',err:'Error'};const setSt=k=>{$('#st').textContent=MSG[k];const y=$('#sy');if(y)y.lastChild.textContent=' '+SY[k]};
 const prio=t=>(t.important?2:0)+(t.urgent?1:0);
 const sortT=(a,b)=>prio(b)-prio(a)||(a.time||'99').localeCompare(b.time||'99')||a.title.localeCompare(b.title);
-function rollover(){if(!loaded)return;const td=today();tasks.filter(t=>!t.done&&t.date&&t.date<td).forEach(t=>write({...t,date:td,updatedAt:Date.now()}))}
 function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):tasks[i]=t;render();
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
@@ -367,15 +369,32 @@ function render(){
   $('#ttl').firstChild.textContent=isT?'Today':fmt(sel,{weekday:'long'});
   $('#dt').textContent=fmt(sel,{day:'numeric',month:'long',year:'numeric'});
   const day=tasks.filter(t=>t.date===sel),todo=day.filter(t=>!t.done&&pfOk(t)).sort(sortT),done=day.filter(t=>t.done&&pfOk(t)).sort(sortT);
-  const od=isT?tasks.filter(t=>!t.done&&t.date&&t.date<td&&pfOk(t)).sort((a,b)=>a.date.localeCompare(b.date)||sortT(a,b)):[];
   $('#pb').style.width=day.length?Math.round(done.length/day.length*100)+'%':'0';
   $('#cnt').textContent=day.length?done.length+' of '+day.length+' done':'';
   let h='';
-  if(od.length)h+='<h2 class="od">Overdue ('+od.length+')</h2>'+od.map(t=>row(t,1)).join('');
   if(todo.length)h+='<h2>To do ('+todo.length+')</h2>'+todo.map(t=>row(t)).join('');
   if(done.length)h+='<h2>Done ('+done.length+')</h2>'+done.map(t=>row(t)).join('');
   $('#list').innerHTML=h||'<div class="empty">Nothing planned for this day.<br>Add your first task above.</div>';
 }
+
+/* ---------- Morning flow: review unfinished, coming up, goals, week glance ---------- */
+const addD=(d,n)=>ymd(new Date(new Date(d+'T12:00').getTime()+n*864e5));
+function renderTri(){const td=today(),late=sel===td?tasks.filter(t=>!t.done&&t.date&&t.date<td).sort((a,b)=>a.date.localeCompare(b.date)):[];
+  $('#tri').innerHTML=late.length?'<div class="tri"><div class="r2"><b>Unfinished from before ('+late.length+')</b><button class="lk2" data-a="ta">Keep all for today</button></div>'+late.map(t=>'<div class="trr" data-id="'+t.id+'"><div class="m">'+esc(t.title)+bn(t)+' <span class="tg n">'+fmt(t.date,{day:'numeric',month:'short'})+'</span></div><div class="row"><button class="chip" data-a="tk">Today</button><button class="chip" data-a="tw">Tomorrow</button><label class="chip">Pick date <input type="date" data-a="tp"></label><button class="chip" data-a="td">Drop</button></div></div>').join('')+'</div>':''}
+const triMove=(t,d)=>write({...t,date:d,updatedAt:Date.now()});
+$('#tri').onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;const td=today();
+  if(b.dataset.a==='ta'){tasks.filter(t=>!t.done&&t.date&&t.date<td).forEach(t=>triMove(t,td));return}
+  const r=b.closest('.trr'),t=r&&tasks.find(x=>x.id===r.dataset.id);if(!t)return;
+  if(b.dataset.a==='tk')triMove(t,td);else if(b.dataset.a==='tw')triMove(t,addD(td,1));
+  else if(b.dataset.a==='td'){if(t.boardId)write({...t,date:'',updatedAt:Date.now()});else ask('Delete this task?',t.title,()=>remove(t.id))}};
+$('#tri').onchange=e=>{const i=e.target.closest('input[data-a="tp"]'),r=i&&i.closest('.trr'),t=r&&tasks.find(x=>x.id===r.dataset.id);if(t&&i.value)triMove(t,i.value)};
+function renderBrief(){const td=today(),D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5);
+  const up=tasks.filter(t=>t.due&&!t.done&&t.due<=addD(td,7)).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,6);
+  const ag=gls.filter(g=>!g.done&&g.start<=sel&&sel<=g.end).map(g=>{const lt=tasks.filter(t=>t.goalId===g.id),ld=lt.filter(t=>t.done).length;return '<div class="mq">⚑ '+esc(g.title)+'<small>'+(lt.length?ld+'/'+lt.length+' tasks':'Day '+(D(g.start,sel)+1)+' of '+(D(g.start,g.end)+1))+'</small></div>'}).join('');
+  const w0=new Date(td+'T12:00'),st=addD(td,-wOff(w0)),wk=[0,1,2,3,4,5,6].map(i=>{const ds=addD(st,i),n=tasks.filter(t=>t.date===ds&&!t.done).length,dl=tasks.some(t=>t.due===ds&&!t.done);
+    return '<button class="wd'+(ds===sel?' on':'')+(ds===td?' tdy':'')+'" data-d="'+ds+'"><small>'+new Date(ds+'T12:00').toLocaleDateString(LC(),{weekday:'short'})+'</small><b>'+ +ds.slice(8)+'</b><span>'+(n||'·')+(dl?' ⚑':'')+'</span></button>'}).join('');
+  $('#brief').innerHTML='<h2>Coming up</h2>'+(up.map(t=>row(t)).join('')||'<div class="cnt" style="margin:0">Nothing due in the next 7 days.</div>')+(ag?'<h2>Goals</h2>'+ag:'')+'<h2>This week</h2><div class="wkg">'+wk+'</div>'}
+$('#brief').onclick=e=>{const d=e.target.closest('.wd');if(d){sel=d.dataset.d;render();return}$('#list').onclick(e)};
 function add(){const v=$('#in').value.trim();if(!v)return;
   write({type:'task',id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:v,date:sel,time:$('#tm').value||'',due:$('#dd').value||'',important:imp,urgent:urg,done:false,updatedAt:Date.now()});
   $('#in').value='';$('#dd').value='';tmTouched=false;fillTm();imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
@@ -426,7 +445,7 @@ function setMode(m){amode=m;const T={in:['Welcome back','Log in to see your day'
 function start(session){
   showAuth(false);window.EMAIL=session.user.email;window.METAN=(session.user.user_metadata||{}).name||'';
   col=makeCol(sb,session.user.id);setSt('saving');
-  col.onSnapshot(s=>{const all=s.docs.map(d=>d.data());tasks=all.filter(x=>x&&x.type==='task');boards=all.filter(x=>x&&x.type==='board');chs=all.filter(x=>x&&x.type==='challenge');rts=all.filter(x=>x&&x.type==='routine');gls=all.filter(x=>x&&x.type==='goal');evs=all.filter(x=>x&&x.type==='event');prs=all.filter(x=>x&&x.type==='pref');loaded=true;rollover();render();setSt(s.metadata.hasPendingWrites?'saving':'ok')},()=>setSt('err'));
+  col.onSnapshot(s=>{const all=s.docs.map(d=>d.data());tasks=all.filter(x=>x&&x.type==='task');boards=all.filter(x=>x&&x.type==='board');chs=all.filter(x=>x&&x.type==='challenge');rts=all.filter(x=>x&&x.type==='routine');gls=all.filter(x=>x&&x.type==='goal');evs=all.filter(x=>x&&x.type==='event');prs=all.filter(x=>x&&x.type==='pref');loaded=true;render();setSt(s.metadata.hasPendingWrites?'saving':'ok')},()=>setSt('err'));
   window.addEventListener('online',()=>col.sync().then(()=>setSt('ok')).catch(()=>setSt('err')));
   setInterval(()=>{if(navigator.onLine)col.sync().then(()=>setSt('ok')).catch(()=>setSt('err'))},60000)}
 async function submit(){
@@ -459,7 +478,7 @@ $('#fg').onclick=async()=>{const email=$('#ae').value.trim();if(!email){amsg('Ty
 
 let boards=[],chs=[],selB=null,addingB=false,fc=null,armed=null;
 const gid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
+const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderWk();renderMo();renderSide();renderTri();renderBrief();renderWel();renderPf();renderStrip();renderSeg();setHd()};
 function save(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o;render();
   if(col){setSt('saving');col.doc(o.id).set(o).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function drop(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);if(i>=0)a.splice(i,1);
@@ -712,8 +731,7 @@ function renderSide(){
   const td=today(),isT=sel===td;
   const open=tasks.filter(t=>!t.done&&(t.date===sel||(isT&&t.date&&t.date<td)));
   const q=(i,u)=>open.filter(t=>!!t.important===i&&!!t.urgent===u).map(t=>'<div class="mq">'+esc(t.title)+'</div>').join('')||'<div class="mq mu">None</div>';
-  const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5),ag=gls.filter(g=>!g.done&&g.start<=sel&&sel<=g.end).map(g=>{const lt=tasks.filter(t=>t.goalId===g.id),ld=lt.filter(t=>t.done).length;return '<div class="mq">⚑ '+esc(g.title)+'<small>'+(lt.length?ld+'/'+lt.length+' tasks':'Day '+(D(g.start,sel)+1)+' of '+(D(g.start,g.end)+1))+'</small></div>'}).join('');
-  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'+(ag?'<h2>Goals</h2>'+ag:'')}
+  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'}
 /* ---------- 3-dot menus, rename dialog, reminders, current-time defaults ---------- */
 const DOTS='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
 const pad2=n=>String(n).padStart(2,'0');
@@ -787,7 +805,7 @@ function checkRem(){if(S.notif===false)return;const now=nowD().getTime(),f=fired
     f[key]=now;ch=true;const body=(e.time?fT(e.time)+' · ':'')+(e.remind===0?'Starting now':'In '+remShort(e.remind));
     toast(e.title+' · '+body);notify(e.title,body,key)});
   if(ch){const ks=Object.keys(f);if(ks.length>300)ks.slice(0,ks.length-300).forEach(k=>delete f[k]);try{localStorage.setItem('dpFired',JSON.stringify(f))}catch(e){}}}
-setInterval(rollover,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollover()});setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
+setInterval(checkRem,20000);setTimeout(checkRem,4000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkRem()});
 
 /* ---------- Settings: language, time format, time region, week start, notifications ---------- */
 const TZS=['','Africa/Algiers','Africa/Cairo','Africa/Casablanca','Africa/Tunis','Africa/Lagos','Africa/Johannesburg','Europe/London','Europe/Paris','Europe/Berlin','Europe/Istanbul','Asia/Riyadh','Asia/Dubai','Asia/Kolkata','Asia/Shanghai','Asia/Tokyo','Australia/Sydney','America/New_York','America/Chicago','America/Los_Angeles','America/Sao_Paulo'];
@@ -802,7 +820,7 @@ function settingsHtml(){let dz='';try{dz=Intl.DateTimeFormat().resolvedOptions()
   srow('pin','Time region','<select id="stz">'+TZS.map(z=>op(z,z?z.replace(/_/g,' '):'Device default ('+dz+')',S.tz===z)).join('')+'</select>')+
   srow('cal','Week starts on',ch(+S.ws!==1,'ws','0','Sunday')+ch(+S.ws===1,'ws','1','Monday'))+
   srow('bell','Notifications',ch(S.notif,'nt','on','Allow')+ch(!S.notif,'nt','off','Deny'))+'<div class="cnt nth">Deny only mutes this app. To block the browser itself, use your browser site settings.</div>'}
-const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^(\d+)\/(\d+) tasks$/,'$1/$2 tâches','$1/$2 مهام'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
+const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Overdue \((\d+)\)$/,'En retard ($1)','متأخرة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^(\d+)\/(\d+) tasks$/,'$1/$2 tâches','$1/$2 مهام'],[/^Unfinished from before \((\d+)\)$/,'Non terminées avant ($1)','غير منجزة سابقًا ($1)'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Signed in as (.+)$/,'Connecté : $1','مسجل الدخول: $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
 `Today|Aujourd'hui|اليوم
 Boards|Tableaux|اللوحات
 Challenges|Défis|التحديات
@@ -887,6 +905,13 @@ Edit profile|Modifier le profil|تعديل الملف
 Tasks|Tâches|المهام
 This week|Cette semaine|هذا الأسبوع
 Theme|Thème|السمة
+Keep all for today|Tout garder pour aujourd'hui|إبقاء الكل لليوم
+Tomorrow|Demain|غدًا
+Pick date|Choisir une date|اختر تاريخًا
+Drop|Abandonner|إسقاط
+Coming up|À venir|قادم
+This week|Cette semaine|هذا الأسبوع
+Nothing due in the next 7 days.|Rien à rendre dans les 7 prochains jours.|لا شيء مستحق خلال 7 أيام.
 Upcoming|À venir|قادمة
 No goal|Aucun objectif|بلا هدف
 Deadline|Échéance|الموعد النهائي
@@ -941,6 +966,6 @@ function tr(){if(S.lang!=='en')_trd=true;if(!_trd)return;
   while(n=w.nextNode()){const r=OT.get(n),src=r&&n.data===r.t?r.o:n.data,out=trs(src);if(out!==n.data)n.data=out;OT.set(n,{o:src,t:out})}
   document.querySelectorAll('[placeholder],[aria-label]').forEach(el=>['placeholder','aria-label'].forEach(a=>{const v=el.getAttribute(a);if(v==null)return;const k='_o'+a,rr=el[k],src=rr&&v===rr.t?rr.o:v,out=trs(src);if(out!==v)el.setAttribute(a,out);el[k]={o:src,t:out}}))}
 new MutationObserver(()=>{cancelAnimationFrame(_raf);_raf=requestAnimationFrame(tr)}).observe(document.body,{childList:true,subtree:true,characterData:true});
-applyS();cform(false);renderBoards();renderCh();wformR();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd();
+applyS();cform(false);renderBoards();renderCh();wformR();renderWk();renderMo();renderSide();renderTri();renderBrief();renderWel();renderPf();renderStrip();renderSeg();setHd();
 try{const t=localStorage.getItem('dpTheme');if(t)applyTheme(t)}catch(e){}applyTheme(theme);document.body.dataset.v='today';
 </script></body></html>
