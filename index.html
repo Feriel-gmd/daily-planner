@@ -301,8 +301,8 @@ option{background:var(--card);color:var(--tx)}
 .lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:2px 0 4px}.lgd span{display:flex;align-items:center;gap:5px}
 .mq small{display:block;color:var(--mu);font-size:11px}
 .tri{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--ac);border-radius:14px;padding:12px;margin:10px 0}.trr{padding:8px 0;border-top:1px solid var(--bd)}.trr .row{margin:6px 0 0}.trr .chip{height:32px;font-size:13px}.trr input[type=date]{border:0;background:transparent;color:inherit;font:inherit;width:118px}
-.wkg{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.wd{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;font:inherit}.wd small{color:var(--mu);font-size:11px}.wd span{font-size:11px;color:var(--mu)}.wd.tdy{border-color:var(--ac)}.wd.on{background:var(--acb)}
 #brief{margin-top:6px}
+#vToday .add:has(#in):not(:focus-within) .row{display:none}#toast{pointer-events:auto}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -327,7 +327,7 @@ option{background:var(--card);color:var(--tx)}
 <div class="st" id="st"></div></div>
 <nav class="nav"><div class="logo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>Planner</div><button class="on" data-v="today"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span>Today</span></button><button data-v="boards"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg><span>Boards</span></button><button data-v="ch"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.500 0 2 1 3 2 3 0-3-1-6 1-8.500z"/></svg><span>Challenges</span></button><button data-v="wk"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h3"/></svg><span>Week</span></button><button data-v="mo"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg><span>Month</span></button><div class="sp"></div><div class="sy" id="sy"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A5.500 5.500 0 0 1 17 9a3.500 3.500 0 0 1 .5 9z"/><path d="M9.500 13.500l2 2 3.500-3.500"/></svg> Not saved</div><button class="me" data-v="pf"><span class="avs" id="av2">?</span><span id="mn">Profile</span></button></nav><button id="fab" aria-label="Add">+</button>
 <div id="dlg" hidden><div class="dbx" role="alertdialog" aria-modal="true"><b id="dt"></b><p id="dm"></p><div class="dr"><button id="dc">Cancel</button><button id="dk">Delete</button></div></div></div>
-<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div><div class="row" id="egr"><label>Goal <select id="egl"></select></label></div><div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter"><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
+<div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task"><div class="row"><label>Date <input type="date" id="ed"></label><label>Time <input type="time" id="em"></label></div><div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div><div class="row" id="egr"><label>Goal <select id="egl"></select></label></div><div class="row"><label>Repeat <select id="erp"><option value="">No repeat</option><option value="daily">Every day</option><option value="weekdays">Weekdays</option><option value="weekly">Every week</option></select></label></div><div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter"><div class="row"><button class="chip" id="ei">Important</button><button class="chip u" id="eu">Urgent</button></div><div class="dr"><button id="ec">Cancel</button><button id="es">Save</button></div></div></div>
 <div id="rnd" hidden><div class="dbx ebx" role="dialog" aria-modal="true"><b id="rnt">Rename</b><input type="text" id="rni" maxlength="60"><div class="dr"><button id="rnc">Cancel</button><button id="rnk">Save</button></div></div></div>
 <div id="toast" hidden role="status"></div>
 <script>
@@ -355,6 +355,11 @@ const prio=t=>(t.important?2:0)+(t.urgent?1:0);
 const sortT=(a,b)=>prio(b)-prio(a)||(a.time||'99').localeCompare(b.time||'99')||a.title.localeCompare(b.title);
 function write(t){const i=tasks.findIndex(x=>x.id===t.id);i<0?tasks.push(t):tasks[i]=t;render();
   if(col){setSt('saving');col.doc(t.id).set(t).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
+function delT(id){const t=tasks.find(x=>x.id===id);if(!t)return;remove(id);toast('Task deleted',()=>write(t))}
+function toggleDone(t){const now=!t.done;write({...t,done:now,doneAt:now?Date.now():null,spawned:t.spawned||(now&&!!t.rep),updatedAt:Date.now()});
+  if(now&&t.rep&&!t.spawned){const td=today(),b=t.date&&t.date>td?t.date:td;let n=addD(b,t.rep==='weekly'?7:1);if(t.rep==='weekdays')while([0,6].includes(new Date(n+'T12:00').getDay()))n=addD(n,1);
+    const off=Math.round((new Date(n+'T12:00')-new Date((t.date||td)+'T12:00'))/864e5);
+    write({...t,id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:n,due:t.due?addD(t.due,off):'',done:false,doneAt:null,spawned:false,cl:(t.cl||[]).map(x=>({...x,done:false})),updatedAt:Date.now()})}}
 function remove(id){tasks=tasks.filter(x=>x.id!==id);render();
   if(col){setSt('saving');col.doc(id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 const gTag=t=>{const g=t.goalId&&gls.find(x=>x.id===t.goalId);return g?'<span class="tg n">⚑ '+esc(g.title)+'</span>':''};
@@ -362,7 +367,7 @@ const bn=t=>{const b=t.boardId&&boards.find(x=>x.id===t.boardId),c=b&&b.stages.f
 function row(t,od){const tg=[];
   if(od)tg.push('<span class="tg d">'+fmt(t.date,{day:'numeric',month:'short'})+'</span>');
   if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+'</span>');
-  {const a=dueTag(t),c=clTag(t),g=gTag(t);if(a)tg.push(a);if(c)tg.push(c);if(g)tg.push(g)}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
+  {const a=dueTag(t),c=clTag(t),g=gTag(t);if(a)tg.push(a);if(c)tg.push(c);if(g)tg.push(g);if(t.rep)tg.push('<span class="tg n">↻</span>')}if(prio(t)===3)tg.push('<span class="tg d">High</span>');else if(prio(t)>0)tg.push('<span class="tg u">Medium</span>');
   return '<div class="t'+(t.done?' done':'')+'" data-id="'+t.id+'"><button class="cb" data-a="tg" aria-label="Toggle done">'+(t.done?'✓':'')+'</button><div class="m">'+esc(t.title)+bn(t)+(tg.length?'<div class="tags">'+tg.join('')+'</div>':'')+'</div><button class="x" data-a="ed" aria-label="Edit task">'+PENCIL+'</button><button class="x" data-a="rm" aria-label="Delete task">'+TRASH+'</button></div>'}
 function render(){
   const td=today(),isT=sel===td;
@@ -386,15 +391,11 @@ $('#tri').onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;co
   if(b.dataset.a==='ta'){tasks.filter(t=>!t.done&&t.date&&t.date<td).forEach(t=>triMove(t,td));return}
   const r=b.closest('.trr'),t=r&&tasks.find(x=>x.id===r.dataset.id);if(!t)return;
   if(b.dataset.a==='tk')triMove(t,td);else if(b.dataset.a==='tw')triMove(t,addD(td,1));
-  else if(b.dataset.a==='td'){if(t.boardId)write({...t,date:'',updatedAt:Date.now()});else ask('Delete this task?',t.title,()=>remove(t.id))}};
+  else if(b.dataset.a==='td'){if(t.boardId)write({...t,date:'',updatedAt:Date.now()});else delT(t.id)}};
 $('#tri').onchange=e=>{const i=e.target.closest('input[data-a="tp"]'),r=i&&i.closest('.trr'),t=r&&tasks.find(x=>x.id===r.dataset.id);if(t&&i.value)triMove(t,i.value)};
-function renderBrief(){const td=today(),D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5);
-  const up=tasks.filter(t=>t.due&&!t.done&&t.due<=addD(td,7)).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,6);
-  const ag=gls.filter(g=>!g.done&&g.start<=sel&&sel<=g.end).map(g=>{const lt=tasks.filter(t=>t.goalId===g.id),ld=lt.filter(t=>t.done).length;return '<div class="mq">⚑ '+esc(g.title)+'<small>'+(lt.length?ld+'/'+lt.length+' tasks':'Day '+(D(g.start,sel)+1)+' of '+(D(g.start,g.end)+1))+'</small></div>'}).join('');
-  const w0=new Date(td+'T12:00'),st=addD(td,-wOff(w0)),wk=[0,1,2,3,4,5,6].map(i=>{const ds=addD(st,i),n=tasks.filter(t=>t.date===ds&&!t.done).length,dl=tasks.some(t=>t.due===ds&&!t.done);
-    return '<button class="wd'+(ds===sel?' on':'')+(ds===td?' tdy':'')+'" data-d="'+ds+'"><small>'+new Date(ds+'T12:00').toLocaleDateString(LC(),{weekday:'short'})+'</small><b>'+ +ds.slice(8)+'</b><span>'+(n||'·')+(dl?' ⚑':'')+'</span></button>'}).join('');
-  $('#brief').innerHTML='<h2>Coming up</h2>'+(up.map(t=>row(t)).join('')||'<div class="cnt" style="margin:0">Nothing due in the next 7 days.</div>')+(ag?'<h2>Goals</h2>'+ag:'')+'<h2>This week</h2><div class="wkg">'+wk+'</div>'}
-$('#brief').onclick=e=>{const d=e.target.closest('.wd');if(d){sel=d.dataset.d;render();return}$('#list').onclick(e)};
+function renderBrief(){const td=today(),up=tasks.filter(t=>t.due&&!t.done&&t.due<=addD(td,7)).sort((a,b)=>a.due.localeCompare(b.due)).slice(0,6);
+  $('#brief').innerHTML='<h2>Coming up</h2>'+(up.map(t=>row(t)).join('')||'<div class="cnt" style="margin:0">Nothing due in the next 7 days.</div>')}
+$('#brief').onclick=e=>$('#list').onclick(e);
 function add(){const v=$('#in').value.trim();if(!v)return;
   write({type:'task',id:'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),title:v,date:sel,time:$('#tm').value||'',due:$('#dd').value||'',important:imp,urgent:urg,done:false,updatedAt:Date.now()});
   $('#in').value='';$('#dd').value='';tmTouched=false;fillTm();imp=urg=false;$('#imp').classList.remove('on');$('#urg').classList.remove('on');$('#in').focus()}
@@ -404,7 +405,7 @@ $('#urg').onclick=e=>{urg=!urg;e.currentTarget.classList.toggle('on',urg)};
 const shift=n=>{const d=new Date(sel+'T12:00');d.setDate(d.getDate()+n);sel=ymd(d);render()};
 $('#prev').onclick=()=>shift(-1);$('#next').onclick=()=>shift(1);$('#tod').onclick=()=>{sel=today();render()};
 $('#list').onclick=e=>{if(!e.target.closest('button')){const m=e.target.closest('.t .m');if(m)openEdit(m.closest('.t').dataset.id);return}const b=e.target.closest('button[data-a]');if(!b)return;const id=b.closest('.t').dataset.id,t=tasks.find(x=>x.id===id);if(!t)return;
-  if(b.dataset.a==='rm')ask('Delete this task?',t.title,()=>remove(id));else if(b.dataset.a==='ed')openEdit(id);else write({...t,done:!t.done,doneAt:t.done?null:Date.now(),updatedAt:Date.now()})};
+  if(b.dataset.a==='rm')delT(id);else if(b.dataset.a==='ed')openEdit(id);else toggleDone(t)};
 render();setSt('local');
 /* ---------- Supabase: database layer (same interface the app already uses) ---------- */
 function makeCol(sb,uid){
@@ -517,9 +518,9 @@ $('#bv').onclick=e=>{const b=e.target.closest('button');if(!b){const m=e.target.
   if(k==='dcol'){const sid=b.closest('.col').dataset.s;ask('Delete this card?','The card and all its tasks will be removed.',()=>{tasks.filter(t=>t.stageId===sid).forEach(t=>remove(t.id));save({...B,stages:B.stages.filter(s=>s.id!==sid)})});return}
   const c=b.closest('.cd');if(!c)return;const t=tasks.find(x=>x.id===c.dataset.id);if(!t)return;
   if(k==='ed')return openEdit(t.id);
-  if(k==='rm')return ask('Delete this task?',t.title,()=>remove(t.id));
+  if(k==='rm')return delT(t.id);
   if(k==='pt')return write({...t,date:today(),updatedAt:Date.now()});
-  if(k==='dn')return write({...t,done:!t.done,doneAt:t.done?null:Date.now(),updatedAt:Date.now()});
+  if(k==='dn')return toggleDone(t);
   const i=B.stages.findIndex(s=>s.id===t.stageId),j=k==='mr'?i+1:i-1;if(j<0||j>=B.stages.length)return;
   write({...t,stageId:B.stages[j].id,updatedAt:Date.now()})};
 $('#bv').onkeydown=e=>{const i=e.target;if(i.tagName!=='INPUT')return;
@@ -659,13 +660,13 @@ function dclose(){$('#dlg').hidden=true;dfn=null}
 $('#dc').onclick=dclose;$('#dlg').onclick=e=>{if(e.target.id==='dlg')dclose()};
 $('#dk').onclick=()=>{const f=dfn;dclose();if(f)f()};
 function openEdit(id){const t=tasks.find(x=>x.id===id);if(!t)return;etask=t;
-  ecl=(t.cl||[]).map(x=>({...x}));$('#edd').value=t.due||'';$('#egr').hidden=!gls.length;$('#egl').innerHTML='<option value="">No goal</option>'+gls.filter(g=>!g.done||g.id===t.goalId).map(g=>'<option value="'+g.id+'"'+(t.goalId===g.id?' selected':'')+'>'+esc(g.title)+'</option>').join('');renderEcl();updEds();$('#eci').value='';$('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
+  ecl=(t.cl||[]).map(x=>({...x}));$('#edd').value=t.due||'';$('#erp').value=t.rep||'';$('#egr').hidden=!gls.length;$('#egl').innerHTML='<option value="">No goal</option>'+gls.filter(g=>!g.done||g.id===t.goalId).map(g=>'<option value="'+g.id+'"'+(t.goalId===g.id?' selected':'')+'>'+esc(g.title)+'</option>').join('');renderEcl();updEds();$('#eci').value='';$('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
   $('#ei').classList.toggle('on',!!t.important);$('#eu').classList.toggle('on',!!t.urgent);$('#edl').hidden=false;$('#et').focus()}
 function closeEdit(){$('#edl').hidden=true;etask=null}
 $('#ei').onclick=e=>e.currentTarget.classList.toggle('on');$('#eu').onclick=e=>e.currentTarget.classList.toggle('on');
 $('#ec').onclick=closeEdit;$('#edl').onclick=e=>{if(e.target.id==='edl')closeEdit()};
 function saveEdit(){const v=$('#et').value.trim();if(!v||!etask){$('#et').focus();return}
-  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),due:$('#edd').value||'',goalId:$('#egl').value||'',cl:addCk(),updatedAt:Date.now()});closeEdit()}
+  write({...etask,title:v,date:$('#ed').value||(etask.boardId?'':today()),time:$('#em').value,important:$('#ei').classList.contains('on'),urgent:$('#eu').classList.contains('on'),due:$('#edd').value||'',goalId:$('#egl').value||'',rep:$('#erp').value,cl:addCk(),updatedAt:Date.now()});closeEdit()}
 $('#es').onclick=saveEdit;
 $('#edl').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='et')saveEdit()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#dlg').hidden)dclose();if(!$('#edl').hidden)closeEdit()}});
@@ -699,8 +700,10 @@ const pn=()=>(prs[0]&&prs[0].name)||'';
 function savePref(patch){save({...(prs[0]||{type:'pref',id:'pref'}),...patch})}
 function renderWel(){if(col&&loaded&&!pn()&&window.METAN&&!window.didN){window.didN=1;savePref({name:window.METAN});return}const a=document.activeElement;if(a&&a.matches&&a.matches('#wel input')&&a.value)return;
   const need=col&&loaded&&!pn()&&!welX;
-  $('#wel').innerHTML=need?'<div class="add"><b>Welcome to your planner</b><div class="cnt" style="margin:4px 0 8px">Tell me your name. You can change it later in Profile.</div><input type="text" id="wn" placeholder="Your name" maxlength="40"><div class="row"><button class="chip" data-a="wskip">Skip for now</button><button class="go" data-a="wsave">Save</button></div></div>':''}
+  $('#wel').innerHTML=need?'<div class="add"><b>Welcome to your planner</b><div class="cnt" style="margin:4px 0 8px">Tell me your name. You can change it later in Profile.</div><input type="text" id="wn" placeholder="Your name" maxlength="40"><div class="row"><button class="chip" data-a="wskip">Skip for now</button><button class="go" data-a="wsave">Save</button></div></div>':guideH()}
+const guideH=()=>col&&loaded&&pn()&&!(prs[0]&&prs[0].seen)?'<div class="add"><b>Quick tour</b><div class="cnt" style="margin:4px 0 8px">Type a task above and press Enter. Open it to add a deadline, checklist, goal or repeat.<br>Boards hold bigger work as cards. Use Plan for today in a task menu to bring one here.<br>Each morning, review what is unfinished: keep it, move it, or drop it.</div><div class="row"><button class="go" data-a="wgot">Got it</button></div></div>':'';
 $('#wel').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.a==='wgot'){savePref({seen:true});return}
   if(b.dataset.a==='wskip'){welX=true;renderWel();return}
   if(b.dataset.a==='wsave'){const v=$('#wn').value.trim();if(!v){$('#wn').focus();return}savePref({name:v})}};
 $('#wel').onkeydown=e=>{if(e.key==='Enter'&&e.target.id==='wn'){const b=document.querySelector('[data-a=wsave]');if(b)b.click()}};
@@ -731,7 +734,8 @@ function renderSide(){
   const td=today(),isT=sel===td;
   const open=tasks.filter(t=>!t.done&&(t.date===sel||(isT&&t.date&&t.date<td)));
   const q=(i,u)=>open.filter(t=>!!t.important===i&&!!t.urgent===u).map(t=>'<div class="mq">'+esc(t.title)+'</div>').join('')||'<div class="mq mu">None</div>';
-  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'}
+  const D=(x,y)=>Math.round((new Date(y+'T12:00')-new Date(x+'T12:00'))/864e5),ag=gls.filter(g=>!g.done&&g.start<=sel&&sel<=g.end).map(g=>{const lt=tasks.filter(t=>t.goalId===g.id),ld=lt.filter(t=>t.done).length;return '<div class="mq">⚑ '+esc(g.title)+'<small>'+(lt.length?ld+'/'+lt.length+' tasks':'Day '+(D(g.start,sel)+1)+' of '+(D(g.start,g.end)+1))+'</small></div>'}).join('');
+  $('#side').innerHTML='<h2>Progress</h2><div class="chc"><b>'+esc($('#cnt').textContent||'Nothing planned yet')+'</b><div class="bar"><i style="width:'+$('#pb').style.width+'"></i></div></div><h2>Importance and urgency</h2><div class="mx2"><div class="s2m"><b>Do first</b>'+q(true,true)+'</div><div class="s0m"><b>Plan</b>'+q(true,false)+'</div><div class="s1m"><b>Quick</b>'+q(false,true)+'</div><div class="s4m"><b>Later</b>'+q(false,false)+'</div></div>'+(ag?'<h2>Goals</h2>'+ag:'')}
 /* ---------- 3-dot menus, rename dialog, reminders, current-time defaults ---------- */
 const DOTS='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
 const pad2=n=>String(n).padStart(2,'0');
@@ -779,11 +783,11 @@ function listMenu(btn,sid){const B=boards.find(x=>x.id===selB);if(!B)return;cons
   it.push({l:'Delete card',d:1,fn:()=>ask('Delete this card?','The card and all its tasks will be removed.',()=>{tasks.filter(t=>t.stageId===sid).forEach(t=>remove(t.id));save({...B,stages:B.stages.filter(x=>x.id!==sid)})})});
   openMenu(btn,it)}
 function taskMenu(btn,id){const B=boards.find(x=>x.id===selB),t=tasks.find(x=>x.id===id);if(!t||!B)return;
-  const it=[{l:'Edit',fn:()=>openEdit(id)},{l:t.done?'Mark as not done':'Mark as done',fn:()=>write({...t,done:!t.done,doneAt:t.done?null:Date.now(),updatedAt:Date.now()})}];
+  const it=[{l:'Edit',fn:()=>openEdit(id)},{l:t.done?'Mark as not done':'Mark as done',fn:()=>toggleDone(t)}];
   if(!t.date)it.push({l:'Plan for today',fn:()=>write({...t,date:today(),updatedAt:Date.now()})});
   const others=B.stages.filter(s=>s.id!==t.stageId);
   if(others.length)it.push({l:'Move to',sub:others.map(s=>({l:s.name,fn:()=>write({...t,stageId:s.id,updatedAt:Date.now()})}))});
-  it.push({l:'Delete',d:1,fn:()=>ask('Delete this task?',t.title,()=>remove(id))});
+  it.push({l:'Delete',d:1,fn:()=>delT(id)});
   openMenu(btn,it)}
 /* current time shown by default in the time field, until the user changes it */
 function fillTm(){const t=$('#tm');if(t&&!tmTouched)t.value=nowHM()}
@@ -792,7 +796,7 @@ setInterval(fillTm,30000);fillTm();
 $('#mv2').addEventListener('input',e=>{if(e.target.id==='mt')mtV=e.target.value;else if(e.target.id==='mr'){mrV=e.target.value;if(mrV!=='')askNotif()}});
 /* event reminders: notification while the app is open, plus an in-app banner */
 function askNotif(){try{if('Notification' in window&&Notification.permission==='default')Notification.requestPermission()}catch(e){}}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>{t.hidden=true},9000)}
+function toast(msg,undo){const t=$('#toast');t.textContent=msg;if(undo){const b=document.createElement('button');b.className='lk2';b.textContent='Undo';b.style.cssText='margin-left:12px;color:#fff;text-decoration:underline';b.onclick=()=>{undo();t.hidden=true};t.append(b)}t.hidden=false;clearTimeout(window._tt);window._tt=setTimeout(()=>{t.hidden=true},undo?6000:9000)}
 function firedMap(){try{return JSON.parse(localStorage.getItem('dpFired')||'{}')}catch(e){return{}}}
 const remShort=m=>m>=1440?'1 day':m>=60?(m/60)+(m===60?' hour':' hours'):m+' min';
 function notify(title,body,tag){try{if(S.notif===false)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
@@ -905,6 +909,15 @@ Edit profile|Modifier le profil|تعديل الملف
 Tasks|Tâches|المهام
 This week|Cette semaine|هذا الأسبوع
 Theme|Thème|السمة
+Undo|Annuler|تراجع
+Task deleted|Tâche supprimée|تم حذف المهمة
+Repeat|Répéter|تكرار
+No repeat|Sans répétition|بلا تكرار
+Every day|Tous les jours|كل يوم
+Weekdays|Jours ouvrés|أيام العمل
+Every week|Chaque semaine|كل أسبوع
+Quick tour|Petit tour|جولة سريعة
+Got it|Compris|فهمت
 Keep all for today|Tout garder pour aujourd'hui|إبقاء الكل لليوم
 Tomorrow|Demain|غدًا
 Pick date|Choisir une date|اختر تاريخًا
