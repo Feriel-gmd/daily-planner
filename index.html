@@ -300,6 +300,12 @@ option{background:var(--card);color:var(--tx)}
 .dd{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.dd i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.dd i.o,.lgd i.o{background:var(--dg)}.dd i.t,.lgd i.t{background:#f5a524}.dd small{font-size:10px;color:var(--mu)}
 .lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:2px 0 4px}.lgd span{display:flex;align-items:center;gap:5px}
 .mq small{display:block;color:var(--mu);font-size:11px}
+</style><style id="lean">
+#vToday .top{display:none}
+#thb{display:none}
+#list .x[data-a=ed]{display:none}
+.add #dd{display:none}
+#list .t .m{cursor:pointer}
 </style></head>
 <body><div id="auth" hidden><div class="ac2"><div class="lg">✓</div><h1 id="at">Welcome back</h1><div class="sb" id="asb">Log in to see your day</div>
 <div class="err" id="ns" hidden>Add your Supabase URL and key in config.js first. The README explains how.</div>
@@ -403,7 +409,7 @@ function makeCol(sb,uid){
       set:async o=>{cache.set(id,o);pend[id]='set';notify();await flush();notify()},
       delete:async()=>{cache.delete(id);pend[id]='del';notify();await flush();notify()}}),
     onSnapshot:(f,err)=>{cb=f;notify();pull().catch(e=>err&&err(e));
-      sb.channel('items-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'items'},()=>{pull().catch(()=>{})}).subscribe()},
+      let lz;sb.channel('items-'+uid).on('postgres_changes',{event:'*',schema:'public',table:'items'},()=>{clearTimeout(lz);lz=setTimeout(()=>{if(!Object.keys(pend).length)pull().catch(()=>{})},700)}).subscribe()},
     sync:()=>pull()};
   return col}
 /* ---------- Login, sign up, logout ---------- */
@@ -459,14 +465,14 @@ $('#fg').onclick=async()=>{const email=$('#ae').value.trim();if(!email){amsg('Ty
 
 let boards=[],chs=[],selB=null,addingB=false,fc=null,armed=null;
 const gid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const _r=render;render=function(){applyS();_r();renderBoards();renderCh();renderWk();renderMo();renderSide();renderWel();renderPf();renderStrip();renderSeg();setHd()};
+const _r=render;render=function(){applyS();_r();renderWel();renderPf();const v=curV;if(v==='today'){renderSide();renderStrip();renderSeg()}else if(v==='boards')renderBoards();else if(v==='ch')renderCh();else if(v==='wk')renderWk();else if(v==='mo')renderMo();setHd()};
 function save(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);i<0?a.push(o):a[i]=o;render();
   if(col){setSt('saving');col.doc(o.id).set(o).then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function drop(o){const a=arr(o.type),i=a.findIndex(x=>x.id===o.id);if(i>=0)a.splice(i,1);
   if(o.type==='board')tasks.filter(t=>t.boardId===o.id).forEach(t=>remove(t.id));
   render();if(col){setSt('saving');col.doc(o.id).delete().then(()=>setSt('ok')).catch(()=>setSt('err'))}}
 function arm(id,fn){if(armed===id){armed=null;fn();return}armed=id;render();setTimeout(()=>{if(armed===id){armed=null;render()}},3000)}
-function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle('pfv',v==='pf');if(v!=='pf')lastV=v;setHd();$('#vPf').hidden=v!=='pf';$('#vToday').hidden=v!=='today';$('#vBoards').hidden=v!=='boards';$('#vCh').hidden=v!=='ch';$('#vWk').hidden=v!=='wk';$('#vMo').hidden=v!=='mo';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v))}
+function show(v){curV=v;document.body.dataset.v=v;document.body.classList.toggle('pfv',v==='pf');if(v!=='pf')lastV=v;setHd();$('#vPf').hidden=v!=='pf';$('#vToday').hidden=v!=='today';$('#vBoards').hidden=v!=='boards';$('#vCh').hidden=v!=='ch';$('#vWk').hidden=v!=='wk';$('#vMo').hidden=v!=='mo';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));render()}
 document.querySelector('.nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
 
 /* ---------- Boards: board > cards > tasks ---------- */
