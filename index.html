@@ -322,13 +322,13 @@ function renderCh(){const sorted=chs.slice().sort((a,b)=>a.created-b.created);
     let k=Math.min(ti,c.days-1),streak=0;if(k>=0){if(k===ti&&!dayFull(c,k))k--;while(k>=0&&dayFull(c,k)){streak++;k--}}
     return '<div class="chc"><div class="r2"><b class="m">'+esc(c.name)+'</b><span class="tg">'+st+'</span></div><div class="bar"><i style="width:'+Math.round(full/c.days*100)+'%"></i></div><div class="cnt">'+full+' of '+c.days+' days complete · streak '+streak+'</div><div class="dots">'+dots+'</div>'+(ti>=0&&ti<c.days?'<h2>Today</h2>'+chItems(c,ti):'')+'<div class="rowx"><button class="chip" data-a="dc" data-id="'+c.id+'">Delete challenge</button></div></div>'}).join('')||'<div class="empty">No challenges yet.<br>Create one, for example 75 days of fitness.</div>'}
 $('#cl').onclick=chClick;
-function cform(open){$('#cf').innerHTML=open==='g'?GFORM:open?'<div class="add"><input type="text" id="cn" placeholder="Challenge name, e.g. 75 days of fitness" maxlength="60"><div class="row"><label>Starts <input type="date" id="cs" value="'+today()+'"></label><label>Days <input type="number" id="cd" min="1" max="365" value="75"></label></div><input type="text" id="ci" placeholder="Daily items, separated by commas (Workout, Read 10 pages)" maxlength="300"><div class="err" id="ce"></div><div class="row"><button class="chip" id="ccx">Cancel</button><button class="go" id="ccr">Create</button></div></div>':'<div class="row"><button class="chip" id="cnew">+ New challenge</button><button class="chip" id="gnew">+ New goal</button></div>';
-  if(open==='g')$('#gn').focus();else if(open)$('#cn').focus()}
+function cform(open){$('#cf').innerHTML=open==='g'?GFORM():open?'<div class="add"><input type="text" id="cn" placeholder="Challenge name, e.g. 75 days of fitness" maxlength="60"><div class="row"><label>Starts <input type="date" id="cs" value="'+today()+'"></label><label>Days <input type="number" id="cd" min="1" max="365" value="75"></label></div><input type="text" id="ci" placeholder="Daily items, separated by commas (Workout, Read 10 pages)" maxlength="300"><div class="err" id="ce"></div><div class="row"><button class="chip" id="ccx">Cancel</button><button class="go" id="ccr">Create</button></div></div>':'<div class="row"><button class="chip" id="cnew">+ New challenge</button><button class="chip" id="gnew">+ New goal</button></div>';
+  if(open==='g'){$('#gn').focus();updGv()}else if(open)$('#cn').focus()}
 function createCh(){const name=$('#cn').value.trim(),days=parseInt($('#cd').value,10),start=$('#cs').value||today(),items=$('#ci').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,10);
   const err=!name?'Enter a name.':!(days>=1&&days<=365)?'Days must be between 1 and 365.':!items.length?'Add at least one daily item.':'';
   if(err){$('#ce').textContent=err;return}
   put({type:'challenge',id:gid('c'),name,start,days,items,done:{},created:Date.now()});cform(false)}
-$('#cf').onclick=e=>{const id=e.target.id;if(id==='cnew')cform(true);else if(id==='ccx')cform(false);else if(id==='ccr')createCh();else if(id==='gnew')cform('g');else if(id==='gcx')cform(false);else if(id==='gcr')createGoal()};
+$('#cf').oninput=e=>{if(/^g[spu]$/.test(e.target.id))updGv()};$('#cf').onclick=e=>{const id=e.target.id;if(id==='cnew')cform(true);else if(id==='ccx')cform(false);else if(id==='ccr')createCh();else if(id==='gnew')cform('g');else if(id==='gcx')cform(false);else if(id==='gcr')createGoal()};
 
 /* ---------- events (Plan) ---------- */
 const evRow=e=>'<div class="t" data-e="'+e.id+'"><span class="evd"></span><div class="m">'+esc(e.title)+(e.time?'<div class="tags"><span class="tg n">'+esc(fT(e.time))+(e.remind!=null?' ⏰':'')+'</span></div>':'')+'</div><button class="d3" data-a="de" aria-label="Delete event">×</button></div>';
@@ -341,11 +341,14 @@ function addEvent(){const v=$('#evt').value.trim();if(!v){$('#evt').focus();retu
   $('#evt').value='';$('#evm').value='';$('#evr').disabled=true;syncEvd();$('#evt').focus()}
 $('#evg').onclick=addEvent;$('#evt').onkeydown=e=>{if(e.key==='Enter')addEvent()};$('#evm').oninput=()=>{$('#evr').disabled=!$('#evm').value};
 /* ---------- goals: every goal is a list in the Goals board, created with the first goal ---------- */
-function addGoal(name,end){const B=boards.find(b=>b.id===GB)||boards.find(b=>b.name==='Goals'),st={id:gid('s'),name,end:end||''};
+function calcEnd(s,n,u){if(!s||!(n>=1))return '';if(u==='m'){const d=new Date(s+'T12:00');d.setMonth(d.getMonth()+n);return addDays(ymd(d),-1)}return addDays(s,(u==='w'?n*7:n)-1)}
+function updGv(){const e=calcEnd($('#gs').value,parseInt($('#gp').value,10),$('#gu').value);$('#gv').textContent=e?'Ends '+fmt(e,{weekday:'short',day:'numeric',month:'long',year:'numeric'})+' ⚑':''}
+function addGoal(name,end,start){const B=boards.find(b=>b.id===GB)||boards.find(b=>b.name==='Goals'),st={id:gid('s'),name,start:start||'',end:end||''};
   if(B){selB=B.id;put({...B,stages:[...B.stages,st]})}else{selB=GB;put({type:'board',id:GB,name:'Goals',end:'',created:Date.now(),stages:[st]})}
   show('boards');toast('Added to Goals')}
-function createGoal(){const n=$('#gn').value.trim(),e=$('#ge').value;if(!n){$('#gerr').textContent='Enter a goal.';$('#gn').focus();return}cform(false);addGoal(n,e)}
-const GFORM='<div class="add"><input type="text" id="gn" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>End date (optional) <input type="date" id="ge"></label></div><div class="err" id="gerr"></div><div class="row"><button class="chip" id="gcx">Cancel</button><button class="go" id="gcr">Create goal</button></div></div>';
+function createGoal(){const n=$('#gn').value.trim(),st=$('#gs').value,p=parseInt($('#gp').value,10),e=calcEnd(st,p,$('#gu').value);
+  const err=!n?'Enter a goal.':!st?'Pick a start date.':!(p>=1)?'Enter a period.':'';if(err){$('#gerr').textContent=err;return}cform(false);addGoal(n,e,st)}
+const GFORM=()=>'<div class="add"><input type="text" id="gn" placeholder="Goal, e.g. Finish the Coursera course" maxlength="100"><div class="row"><label>Start <input type="date" id="gs" value="'+today()+'"></label><label>Period <input type="number" id="gp" min="1" max="999" value="30"></label><select id="gu" aria-label="Unit"><option value="d">days</option><option value="w">weeks</option><option value="m">months</option></select></div><div class="cnt" id="gv" style="margin:8px 0 0"></div><div class="err" id="gerr"></div><div class="row"><button class="chip" id="gcx">Cancel</button><button class="go" id="gcr">Create goal</button></div></div>';
 function endTag(e){const l=Math.round((new Date(e+'T12:00')-new Date(today()+'T12:00'))/864e5);return '<span class="tg'+(l<0?' d':'')+'">'+(l<0?'Ended '+(-l)+(l===-1?' day':' days')+' ago':l===0?'Ends today':'Ends '+fmt(e,{day:'numeric',month:'short'}))+'</span>'+(l>0?' <span class="tg">'+l+(l===1?' day':' days')+' left</span>':'')}
 /* ---------- Today ---------- */
 function dayStat(){const day=tasks.filter(t=>t.date===sel);let tot=day.length,dn=day.filter(t=>t.done).length;
@@ -703,6 +706,11 @@ Add event|Ajouter l'événement|إضافة الحدث
 + New goal|+ Nouvel objectif|+ هدف جديد
 + New board|+ Nouveau tableau|+ لوحة جديدة
 Create goal|Créer l'objectif|إنشاء الهدف
+Start|Début|البداية
+Period|Période|المدة
+days|jours|أيام
+weeks|semaines|أسابيع
+months|mois|أشهر
 Goals|Objectifs|الأهداف
 Added to Goals|Ajouté aux objectifs|أضيف إلى الأهداف
 Goal, e.g. Finish the Coursera course|Objectif, ex. Finir le cours Coursera|الهدف، مثل إنهاء دورة كورسيرا
