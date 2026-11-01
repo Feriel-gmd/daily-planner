@@ -78,7 +78,7 @@ option{background:var(--card);color:var(--tx)}
 .mc{min-height:62px;border:1px solid transparent;background:var(--card);color:var(--tx);border-radius:12px;padding:4px;text-align:left;display:flex;flex-direction:column;gap:3px;overflow:hidden;font-size:12px;box-shadow:var(--sh)}
 .mc.o{background:transparent;box-shadow:none}.mc.tdy{border-color:var(--ac)}.mc.sel{background:var(--acb);border-color:var(--ac)}
 .mc em{font-style:normal;color:var(--mu);font-size:11px}
-.cdot{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.cdot i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.cdot i.o,.lgd i.o{background:var(--dg)}.cdot i.t,.lgd i.t{background:#f5a524}.cdot small{font-size:10px;color:var(--mu)}
+.cdot{display:flex;gap:3px;align-items:center;flex-wrap:wrap}.cdot i,.lgd i{width:7px;height:7px;border-radius:50%;background:var(--ac);display:inline-block}.cdot i.o,.lgd i.o{background:var(--dg)}.cdot i.td,.lgd i.td{background:#f5a524}.cdot small{font-size:10px;color:var(--mu)}
 .lgd{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mu);margin:8px 0 2px}.lgd span{display:flex;align-items:center;gap:5px}
 /* boards */
 .bch{margin:0 0 12px}
@@ -360,8 +360,8 @@ function renderPlan(){
   tasks.forEach(t=>{if(t.due&&!t.done)(by[t.due]=by[t.due]||[]).push(t)});boards.forEach(b=>{if(b.end)ends[b.end]=1});
   let c=ORD().map(i=>'<b>'+DN[i]+'</b>').join('');for(let i=0;i<off;i++)c+='<div class="mc o"></div>';
   for(let d=1;d<=dim;d++){const ds=mY+'-'+pad2(mM+1)+'-'+pad2(d),n=(by[ds]||[]).length;
-    c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+(n?'<span class="cdot">'+Array(Math.min(n,4)).fill('<i class="'+(ds<td?'o':ds===td?'t':'')+'"></i>').join('')+(n>4?'<small>+'+(n-4)+'</small>':'')+'</span>':'')+(ends[ds]?'<em>⚑</em>':'')+'</button>'}
-  $('#plc').innerHTML='<div class="mh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><button class="mb" data-a="mt0">'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</button><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="lgd"><span><i class="o"></i>Overdue</span><span><i class="t"></i>Due today</span><span><i></i>Upcoming</span></div><div class="mg">'+c+'</div>';
+    c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+(n?'<span class="cdot">'+Array(Math.min(n,4)).fill('<i class="'+(ds<td?'o':ds===td?'td':'')+'"></i>').join('')+(n>4?'<small>+'+(n-4)+'</small>':'')+'</span>':'')+(ends[ds]?'<em>⚑</em>':'')+'</button>'}
+  $('#plc').innerHTML='<div class="mh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><button class="mb" data-a="mt0">'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</button><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="lgd"><span><i class="o"></i>Overdue</span><span><i class="td"></i>Due today</span><span><i></i>Upcoming</span></div><div class="mg">'+c+'</div>';
   const ib=tasks.filter(isInbox).sort((a,b)=>(a.updatedAt||0)-(b.updatedAt||0)),ag=tasks.filter(t=>t.date===mSel||(t.due===mSel&&!t.done)).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||sortT(a,b)),be=boards.filter(b=>b.end===mSel);
   $('#plr').innerHTML='<h2>Inbox ('+ib.length+')</h2>'+(ib.map(t=>row(t,{inbox:1})).join('')||'<div class="cnt">Your inbox is empty.</div>')+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+ag.map(t=>row(t)).join('')+be.map(b=>'<div class="t"><div class="m">Board ends: '+esc(b.name)+'</div></div>').join('')+(ag.length||be.length?'':'<div class="cnt">Nothing planned for this day.</div>')}
 $('#plc').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.a;
