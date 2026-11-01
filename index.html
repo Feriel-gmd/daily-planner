@@ -35,7 +35,7 @@ h2{font-size:16px;font-weight:700;margin:20px 0 8px}h2.od{color:var(--dg)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .chip{height:38px;padding:0 14px;border:1px solid var(--bd);background:transparent;border-radius:20px;font-size:14px;color:var(--mu);display:inline-flex;align-items:center;gap:6px}
 .chip.on{background:var(--acb);border-color:var(--ac);color:var(--ac)}
-.chip.s{height:32px;padding:0 12px;font-size:13px}
+.chip.s{height:26px;padding:0 10px;font-size:12px;border-radius:13px}
 .chip.hi.on{background:var(--wrb);border-color:var(--wr);color:var(--wr)}
 .go{margin-left:auto;height:38px;padding:0 20px;border:0;border-radius:20px;background:var(--btn);color:#fff;font-weight:600}
 .nb{width:40px;height:40px;border:1px solid var(--bd);background:var(--card);border-radius:12px;font-size:18px}
@@ -70,7 +70,7 @@ option{background:var(--card);color:var(--tx)}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
 .tg{font-size:12px;padding:1px 8px;border-radius:10px;background:var(--acb);color:var(--ac)}
 .tg.u{background:var(--wrb);color:var(--wr)}.tg.d{background:var(--dgb);color:var(--dg)}.tg.n{background:transparent;color:var(--mu);padding-left:0}
-.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 /* plan */
 .pl2{display:block}
 .mh{display:flex;align-items:center;justify-content:space-between;gap:8px}.mh .mb{flex:1;border:0;background:transparent;font-size:17px;font-weight:700}
@@ -205,6 +205,7 @@ body.pfv .nav{display:flex}body.pfv #av{visibility:visible}
 <div id="edl" hidden><div class="dbx ebx" role="dialog" aria-modal="true" aria-label="Edit task"><b>Edit task</b><input type="text" id="et" maxlength="200" placeholder="Task">
 <div class="row"><label>Date <input type="date" id="ed"></label><button class="chip" id="edx">Clear</button><span class="tg" id="eds"></span></div>
 <div class="row"><label>Time <input type="time" id="em"></label><label>Reminder <select id="er"></select></label></div>
+<div class="row"><label>Deadline <input type="date" id="edd"></label><button class="chip" id="eddx">Clear</button></div>
 <div class="row"><label>Board <select id="eb"></select></label><label id="egl">Stage <select id="eg"></select></label></div>
 <div class="row"><button class="chip hi" id="ei">High</button></div>
 <div class="ckh"><b>Checklist</b></div><div id="eck"></div><input type="text" id="eci" maxlength="120" placeholder="Add an item and press Enter">
@@ -269,6 +270,7 @@ function row(t,o){o=o||{};const tg=[];
   if(o.late)tg.push('<span class="tg d">'+esc(when(t.date))+'</span>');
   if(t.time)tg.push('<span class="tg n">'+esc(fT(t.time))+(t.remind!=null?' ⏰':'')+'</span>');
   if(t.high)tg.push('<span class="tg u">High</span>');
+  if(t.due&&!t.done)tg.push('<span class="tg '+(t.due<today()?'d':t.due===today()?'u':'')+'">Due '+esc(when(t.due))+'</span>');
   const b=t.boardId&&boards.find(x=>x.id===t.boardId);if(b)tg.push('<span class="tg n">'+esc(b.name)+'</span>');
   if(t.cl&&t.cl.length)tg.push('<span class="tg n">☑ '+t.cl.filter(x=>x.done).length+'/'+t.cl.length+'</span>');
   let act='';
@@ -355,12 +357,12 @@ $('#inb').onclick=()=>show('plan');
 /* ---------- Plan: calendar + inbox + day agenda ---------- */
 function renderPlan(){
   const dim=new Date(mY,mM+1,0).getDate(),off=wOff(new Date(mY,mM,1)),td=today(),by={},ends={};
-  tasks.forEach(t=>{if(t.date&&!t.done)(by[t.date]=by[t.date]||[]).push(t)});boards.forEach(b=>{if(b.end)ends[b.end]=1});
+  tasks.forEach(t=>{if(t.due&&!t.done)(by[t.due]=by[t.due]||[]).push(t)});boards.forEach(b=>{if(b.end)ends[b.end]=1});
   let c=ORD().map(i=>'<b>'+DN[i]+'</b>').join('');for(let i=0;i<off;i++)c+='<div class="mc o"></div>';
   for(let d=1;d<=dim;d++){const ds=mY+'-'+pad2(mM+1)+'-'+pad2(d),n=(by[ds]||[]).length;
     c+='<button class="mc'+(ds===td?' tdy':'')+(ds===mSel?' sel':'')+'" data-d="'+ds+'"><span>'+d+'</span>'+(n?'<span class="cdot">'+Array(Math.min(n,4)).fill('<i class="'+(ds<td?'o':ds===td?'t':'')+'"></i>').join('')+(n>4?'<small>+'+(n-4)+'</small>':'')+'</span>':'')+(ends[ds]?'<em>⚑</em>':'')+'</button>'}
-  $('#plc').innerHTML='<div class="mh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><button class="mb" data-a="mt0">'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</button><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="lgd"><span><i class="o"></i>Carried over</span><span><i class="t"></i>Today</span><span><i></i>Upcoming</span></div><div class="mg">'+c+'</div>';
-  const ib=tasks.filter(isInbox).sort((a,b)=>(a.updatedAt||0)-(b.updatedAt||0)),ag=tasks.filter(t=>t.date===mSel).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||sortT(a,b)),be=boards.filter(b=>b.end===mSel);
+  $('#plc').innerHTML='<div class="mh"><button class="nb" data-a="mp" aria-label="Previous month">‹</button><button class="mb" data-a="mt0">'+new Date(mY,mM,1).toLocaleDateString(LC(),{month:'long',year:'numeric'})+'</button><button class="nb" data-a="mn" aria-label="Next month">›</button></div><div class="lgd"><span><i class="o"></i>Overdue</span><span><i class="t"></i>Due today</span><span><i></i>Upcoming</span></div><div class="mg">'+c+'</div>';
+  const ib=tasks.filter(isInbox).sort((a,b)=>(a.updatedAt||0)-(b.updatedAt||0)),ag=tasks.filter(t=>t.date===mSel||(t.due===mSel&&!t.done)).sort((a,b)=>(a.done?1:0)-(b.done?1:0)||sortT(a,b)),be=boards.filter(b=>b.end===mSel);
   $('#plr').innerHTML='<h2>Inbox ('+ib.length+')</h2>'+(ib.map(t=>row(t,{inbox:1})).join('')||'<div class="cnt">Your inbox is empty.</div>')+'<h2>'+fmt(mSel,{weekday:'long',day:'numeric',month:'long'})+'</h2>'+ag.map(t=>row(t)).join('')+be.map(b=>'<div class="t"><div class="m">Board ends: '+esc(b.name)+'</div></div>').join('')+(ag.length||be.length?'':'<div class="cnt">Nothing planned for this day.</div>')}
 $('#plc').onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.a;
   if(b.dataset.d){mSel=b.dataset.d;ad.date=mSel;updAdd();renderPlan();setHd();return}
@@ -458,7 +460,7 @@ function addCk(){const v=$('#eci').value.trim();if(v){ecl.push({id:gid('k'),text
 function updEd(){const d=$('#ed').value;$('#em').disabled=!d;$('#er').disabled=!d||!$('#em').value;$('#eds').textContent=d?when(d):($('#eb').value?'No date':'Inbox')}
 function fillStg(sid){const b=boards.find(x=>x.id===$('#eb').value);$('#egl').hidden=!b;$('#eg').innerHTML=b?b.stages.map(s=>'<option value="'+s.id+'"'+(s.id===sid?' selected':'')+'>'+esc(s.name)+'</option>').join(''):''}
 function openEdit(id,f){const t=tasks.find(x=>x.id===id);if(!t)return;etask=t;ecl=(t.cl||[]).map(x=>({...x}));
-  $('#et').value=t.title;$('#ed').value=t.date||'';$('#em').value=t.time||'';
+  $('#et').value=t.title;$('#ed').value=t.date||'';$('#edd').value=t.due||'';$('#em').value=t.time||'';
   $('#er').innerHTML=REM.map(r=>'<option value="'+r[0]+'"'+(String(t.remind==null?'':t.remind)===r[0]?' selected':'')+'>'+r[1]+'</option>').join('');
   $('#ei').classList.toggle('on',!!t.high);
   $('#eb').innerHTML='<option value="">No board</option>'+boards.map(b=>'<option value="'+b.id+'"'+(t.boardId===b.id?' selected':'')+'>'+esc(b.name)+'</option>').join('');
@@ -467,11 +469,11 @@ function closeEdit(){$('#edl').hidden=true;etask=null}
 function saveEdit(){const v=$('#et').value.trim();if(!v||!etask){$('#et').focus();return}
   const d=$('#ed').value,tm=d?$('#em').value:'',r=$('#er').value,b=$('#eb').value;
   const o={...etask,title:v,date:d,time:tm,remind:tm&&r!==''?+r:null,high:$('#ei').classList.contains('on'),cl:addCk(),updatedAt:Date.now()};
-  delete o.important;delete o.urgent;delete o.due;delete o.goalId;
+  o.due=$('#edd').value||'';delete o.important;delete o.urgent;delete o.goalId;
   if(b){o.boardId=b;o.stageId=$('#eg').value||((boards.find(x=>x.id===b)||{stages:[]}).stages[0]||{}).id||''}else{delete o.boardId;delete o.stageId}
   put(o);closeEdit()}
 $('#ed').oninput=updEd;$('#em').oninput=updEd;$('#eb').onchange=()=>{fillStg('');updEd()};
-$('#edx').onclick=()=>{$('#ed').value='';updEd()};
+$('#edx').onclick=()=>{$('#ed').value='';updEd()};$('#eddx').onclick=()=>{$('#edd').value=''};
 $('#er').onchange=()=>{if($('#er').value!=='')askNotif()};
 $('#ei').onclick=e=>e.currentTarget.classList.toggle('on');
 $('#eck').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.closest('.cli').dataset.i;if(b.dataset.a==='cx')ecl.splice(i,1);else ecl[i].done=!ecl[i].done;renderEcl()};
@@ -647,7 +649,7 @@ $('#fg').onclick=async()=>{const email=$('#ae').value.trim();if(!email){amsg('Ty
 let _lg=null;
 function applyS(){const p=prs[0]||{};S.lang=p.lang||'en';S.tf=p.tf||'24';S.tz=p.tz||'';S.ws=p.ws||0;S.notif=p.notif!==false;setDN();
   if(_lg!==S.lang){_lg=S.lang;document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';setTimeout(tr,0)}}
-const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Carried over \((\d+)\)$/,'Reportées ($1)','مؤجلة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Inbox \((\d+)\)$/,'Boîte de réception ($1)','الوارد ($1)'],[/^Inbox · (\d+)$/,'Boîte de réception · $1','الوارد · $1'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^Ended (\d+) days? ago$/,'Terminé il y a $1 j','انتهى منذ $1 يوم'],[/^Ends (.+)$/,'Fin le $1','ينتهي في $1'],[/^Board ends: (.+)$/,'Fin du tableau : $1','نهاية اللوحة: $1'],[/^Added to (.+)$/,'Ajouté à $1','أضيف إلى $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
+const DICT={},PAT=[[/^(\d+) of (\d+) done$/,'$1 sur $2 terminées','$1 من $2 منجزة'],[/^Carried over \((\d+)\)$/,'Reportées ($1)','مؤجلة ($1)'],[/^To do \((\d+)\)$/,'À faire ($1)','للإنجاز ($1)'],[/^Done \((\d+)\)$/,'Terminées ($1)','منجزة ($1)'],[/^Inbox \((\d+)\)$/,'Boîte de réception ($1)','الوارد ($1)'],[/^Inbox · (\d+)$/,'Boîte de réception · $1','الوارد · $1'],[/^Day (\d+) of (\d+)$/,'Jour $1 sur $2','اليوم $1 من $2'],[/^(\d+) days? left$/,'$1 j restants','متبقي $1 يوم'],[/^Ended (\d+) days? ago$/,'Terminé il y a $1 j','انتهى منذ $1 يوم'],[/^Due (.+)$/,'Échéance $1','الموعد $1'],[/^Ends (.+)$/,'Fin le $1','ينتهي في $1'],[/^Board ends: (.+)$/,'Fin du tableau : $1','نهاية اللوحة: $1'],[/^Added to (.+)$/,'Ajouté à $1','أضيف إلى $1'],[/^Device default \((.*)\)$/,"Par défaut de l'appareil ($1)",'افتراضي الجهاز ($1)']];
 `Today|Aujourd'hui|اليوم
 Plan|Planning|التخطيط
 Boards|Tableaux|اللوحات
@@ -668,6 +670,9 @@ Your inbox is empty.|Votre boîte est vide.|الوارد فارغ.
 Pick a day|Choisir un jour|اختر يومًا
 Reschedule|Replanifier|إعادة الجدولة
 Carried over|Reportées|مؤجلة
+Overdue|En retard|متأخرة
+Due today|Échéance aujourd'hui|مستحقة اليوم
+Deadline|Échéance|الموعد النهائي
 Upcoming|À venir|قادمة
 Edit task|Modifier la tâche|تعديل المهمة
 Task|Tâche|مهمة
